@@ -16,14 +16,15 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "job_openings")
 public class JobOpening {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 
 	@Column(nullable = false, length = 140)
 	private String title;
@@ -92,7 +93,7 @@ public class JobOpening {
 		status = JobStatus.CANCELLED;
 	}
 
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 

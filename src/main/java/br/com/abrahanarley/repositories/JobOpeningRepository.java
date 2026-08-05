@@ -5,8 +5,9 @@ import br.com.abrahanarley.enums.JobStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface JobOpeningRepository extends JpaRepository<JobOpening, Long> {
+public interface JobOpeningRepository extends JpaRepository<JobOpening, UUID> {
 
 	List<JobOpening> findByStatusOrderByCreatedAtDesc(JobStatus status);
 

@@ -57,11 +57,11 @@ class JobApplicationServiceTest {
 		JobOpening job = TestFixtures.openJob(admin);
 		JobApplication savedApplication = TestFixtures.application(candidate, job);
 		when(authenticatedUserService.currentUser()).thenReturn(candidate);
-		when(jobOpeningService.getById(10L)).thenReturn(job);
+		when(jobOpeningService.getById(TestFixtures.JOB_ID)).thenReturn(job);
 		when(jobApplicationRepository.existsByCandidateAndJobOpening(candidate, job)).thenReturn(false);
 		when(jobApplicationRepository.save(any(JobApplication.class))).thenReturn(savedApplication);
 
-		JobApplicationResponse response = jobApplicationService.apply(10L,
+		JobApplicationResponse response = jobApplicationService.apply(TestFixtures.JOB_ID,
 				new JobApplicationRequest("Quero crescer na empresa."));
 
 		ArgumentCaptor<JobApplication> application = ArgumentCaptor.forClass(JobApplication.class);
@@ -69,8 +69,8 @@ class JobApplicationServiceTest {
 		assertThat(application.getValue().getCandidate()).isEqualTo(candidate);
 		assertThat(application.getValue().getJobOpening()).isEqualTo(job);
 		assertThat(application.getValue().getMotivation()).isEqualTo("Quero crescer na empresa.");
-		assertThat(response.id()).isEqualTo(20L);
-		assertThat(response.jobId()).isEqualTo(10L);
+		assertThat(response.id()).isEqualTo(TestFixtures.APPLICATION_ID);
+		assertThat(response.jobId()).isEqualTo(TestFixtures.JOB_ID);
 		verify(notificationService).notify(candidate, "Candidatura recebida",
 				"Sua candidatura para Analista Java foi registrada.");
 		verify(notificationService).notify(admin, "Nova candidatura",
@@ -83,9 +83,10 @@ class JobApplicationServiceTest {
 		AppUser candidate = TestFixtures.candidate();
 		JobOpening job = TestFixtures.closedJob(admin);
 		when(authenticatedUserService.currentUser()).thenReturn(candidate);
-		when(jobOpeningService.getById(11L)).thenReturn(job);
+		when(jobOpeningService.getById(TestFixtures.CLOSED_JOB_ID)).thenReturn(job);
 
-		assertThatThrownBy(() -> jobApplicationService.apply(11L, new JobApplicationRequest("Tenho interesse.")))
+		assertThatThrownBy(() -> jobApplicationService.apply(TestFixtures.CLOSED_JOB_ID,
+				new JobApplicationRequest("Tenho interesse.")))
 				.isInstanceOf(BusinessException.class)
 				.hasMessage("Only open job positions can receive applications.");
 
@@ -99,10 +100,11 @@ class JobApplicationServiceTest {
 		AppUser candidate = TestFixtures.candidate();
 		JobOpening job = TestFixtures.openJob(admin);
 		when(authenticatedUserService.currentUser()).thenReturn(candidate);
-		when(jobOpeningService.getById(10L)).thenReturn(job);
+		when(jobOpeningService.getById(TestFixtures.JOB_ID)).thenReturn(job);
 		when(jobApplicationRepository.existsByCandidateAndJobOpening(candidate, job)).thenReturn(true);
 
-		assertThatThrownBy(() -> jobApplicationService.apply(10L, new JobApplicationRequest("Tenho interesse.")))
+		assertThatThrownBy(() -> jobApplicationService.apply(TestFixtures.JOB_ID,
+				new JobApplicationRequest("Tenho interesse.")))
 				.isInstanceOf(BusinessException.class)
 				.hasMessage("Candidate already applied to this job opening.");
 
@@ -118,10 +120,10 @@ class JobApplicationServiceTest {
 		JobApplication application = TestFixtures.application(candidate, job);
 		CandidateEvaluation evaluation = TestFixtures.evaluation(application, admin);
 		when(authenticatedUserService.currentUser()).thenReturn(admin);
-		when(jobApplicationRepository.findById(20L)).thenReturn(Optional.of(application));
+		when(jobApplicationRepository.findById(TestFixtures.APPLICATION_ID)).thenReturn(Optional.of(application));
 		when(candidateEvaluationRepository.findByApplication(application)).thenReturn(Optional.of(evaluation));
 
-		EvaluationResponse response = jobApplicationService.evaluate(20L,
+		EvaluationResponse response = jobApplicationService.evaluate(TestFixtures.APPLICATION_ID,
 				new EvaluationRequest(5, true, "Excelente aderencia."));
 
 		assertThat(response.score()).isEqualTo(5);

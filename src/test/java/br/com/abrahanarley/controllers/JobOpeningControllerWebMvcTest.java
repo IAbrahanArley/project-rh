@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -74,7 +75,7 @@ class JobOpeningControllerWebMvcTest {
 	void createShouldReturnCreatedForAdmin() throws Exception {
 		JobOpeningRequest request = validRequest();
 		when(jobOpeningService.create(request)).thenReturn(new JobOpeningResponse(
-				10L,
+				UUID.fromString("00000000-0000-0000-0000-000000000010"),
 				"Analista Java",
 				"Descricao da vaga",
 				"Spring Boot",
@@ -89,7 +90,7 @@ class JobOpeningControllerWebMvcTest {
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.id").value(10))
+				.andExpect(jsonPath("$.id").value("00000000-0000-0000-0000-000000000010"))
 				.andExpect(jsonPath("$.title").value("Analista Java"))
 				.andExpect(jsonPath("$.status").value("OPEN"))
 				.andExpect(jsonPath("$.createdBy").value("Administrador RH"));
@@ -118,7 +119,7 @@ class JobOpeningControllerWebMvcTest {
 	@WithMockUser(username = "admin", roles = "ADMIN")
 	void listShouldReturnJobsForAuthenticatedUser() throws Exception {
 		when(jobOpeningService.list(JobStatus.OPEN)).thenReturn(List.of(new JobOpeningResponse(
-				10L,
+				UUID.fromString("00000000-0000-0000-0000-000000000010"),
 				"Analista Java",
 				"Descricao da vaga",
 				"Spring Boot",
@@ -131,7 +132,7 @@ class JobOpeningControllerWebMvcTest {
 
 		mockMvc.perform(get("/api/jobs").param("status", "OPEN"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].id").value(10))
+				.andExpect(jsonPath("$[0].id").value("00000000-0000-0000-0000-000000000010"))
 				.andExpect(jsonPath("$[0].title").value("Analista Java"))
 				.andExpect(jsonPath("$[0].status").value("OPEN"));
 	}

@@ -34,13 +34,13 @@ class NotificationServiceTest {
 	@Test
 	void markMineAsReadShouldMarkNotificationWhenCurrentUserIsRecipient() {
 		AppUser candidate = TestFixtures.candidate();
-		Notification notification = TestFixtures.notification(40L, candidate);
+		Notification notification = TestFixtures.notification(TestFixtures.NOTIFICATION_ID, candidate);
 		when(authenticatedUserService.currentUser()).thenReturn(candidate);
-		when(notificationRepository.findById(40L)).thenReturn(Optional.of(notification));
+		when(notificationRepository.findById(TestFixtures.NOTIFICATION_ID)).thenReturn(Optional.of(notification));
 
-		NotificationResponse response = notificationService.markMineAsRead(40L);
+		NotificationResponse response = notificationService.markMineAsRead(TestFixtures.NOTIFICATION_ID);
 
-		assertThat(response.id()).isEqualTo(40L);
+		assertThat(response.id()).isEqualTo(TestFixtures.NOTIFICATION_ID);
 		assertThat(response.read()).isTrue();
 		assertThat(notification.isRead()).isTrue();
 	}
@@ -48,12 +48,13 @@ class NotificationServiceTest {
 	@Test
 	void markMineAsReadShouldHideNotificationsFromOtherUsers() {
 		AppUser currentUser = TestFixtures.candidate();
-		AppUser otherUser = TestFixtures.user(3L, "outro", "Outro Usuario", currentUser.getRole());
-		Notification notification = TestFixtures.notification(41L, otherUser);
+		AppUser otherUser = TestFixtures.user(TestFixtures.OTHER_USER_ID, "outro", "Outro Usuario",
+				currentUser.getRole());
+		Notification notification = TestFixtures.notification(TestFixtures.OTHER_NOTIFICATION_ID, otherUser);
 		when(authenticatedUserService.currentUser()).thenReturn(currentUser);
-		when(notificationRepository.findById(41L)).thenReturn(Optional.of(notification));
+		when(notificationRepository.findById(TestFixtures.OTHER_NOTIFICATION_ID)).thenReturn(Optional.of(notification));
 
-		assertThatThrownBy(() -> notificationService.markMineAsRead(41L))
+		assertThatThrownBy(() -> notificationService.markMineAsRead(TestFixtures.OTHER_NOTIFICATION_ID))
 				.isInstanceOf(ResourceNotFoundException.class)
 				.hasMessage("Notification not found.");
 

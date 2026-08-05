@@ -13,14 +13,15 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class AppUser {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 
 	@Column(nullable = false, unique = true, length = 80)
 	private String username;
@@ -69,7 +70,7 @@ public class AppUser {
 		createdAt = OffsetDateTime.now();
 	}
 
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 

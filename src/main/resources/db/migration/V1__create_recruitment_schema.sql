@@ -1,5 +1,7 @@
+create extension if not exists pgcrypto;
+
 create table users (
-    id bigserial primary key,
+    id uuid primary key default gen_random_uuid(),
     username varchar(80) not null unique,
     password varchar(255) not null,
     full_name varchar(120) not null,
@@ -12,22 +14,22 @@ create table users (
 );
 
 create table job_openings (
-    id bigserial primary key,
+    id uuid primary key default gen_random_uuid(),
     title varchar(140) not null,
     description text not null,
     requirements text not null,
     department varchar(80) not null,
     location varchar(80) not null,
     status varchar(30) not null,
-    created_by_id bigint not null references users(id),
+    created_by_id uuid not null references users(id),
     created_at timestamp with time zone not null,
     updated_at timestamp with time zone not null
 );
 
 create table job_applications (
-    id bigserial primary key,
-    candidate_id bigint not null references users(id),
-    job_opening_id bigint not null references job_openings(id),
+    id uuid primary key default gen_random_uuid(),
+    candidate_id uuid not null references users(id),
+    job_opening_id uuid not null references job_openings(id),
     motivation text not null,
     status varchar(30) not null,
     feedback text,
@@ -37,9 +39,9 @@ create table job_applications (
 );
 
 create table candidate_evaluations (
-    id bigserial primary key,
-    application_id bigint not null unique references job_applications(id),
-    evaluator_id bigint not null references users(id),
+    id uuid primary key default gen_random_uuid(),
+    application_id uuid not null unique references job_applications(id),
+    evaluator_id uuid not null references users(id),
     score integer not null check (score between 1 and 5),
     recommended boolean not null,
     comments text not null,
@@ -48,8 +50,8 @@ create table candidate_evaluations (
 );
 
 create table notifications (
-    id bigserial primary key,
-    recipient_id bigint not null references users(id),
+    id uuid primary key default gen_random_uuid(),
+    recipient_id uuid not null references users(id),
     subject varchar(140) not null,
     message text not null,
     read_flag boolean not null default false,

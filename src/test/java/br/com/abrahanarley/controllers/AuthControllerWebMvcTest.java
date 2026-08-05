@@ -91,7 +91,7 @@ class AuthControllerWebMvcTest {
 
 		mockMvc.perform(get("/api/auth/me"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").value(1))
+				.andExpect(jsonPath("$.id").value(TestFixtures.ADMIN_ID.toString()))
 				.andExpect(jsonPath("$.username").value("admin"))
 				.andExpect(jsonPath("$.role").value("ADMIN"));
 	}
