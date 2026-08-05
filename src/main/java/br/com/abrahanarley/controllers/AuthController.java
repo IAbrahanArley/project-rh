@@ -5,16 +5,12 @@ import br.com.abrahanarley.dto.response.AuthenticatedUserResponse;
 import br.com.abrahanarley.dto.response.AuthResponse;
 import br.com.abrahanarley.security.AuthenticatedUserService;
 import br.com.abrahanarley.services.AuthService;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AuthController implements AuthApi {
 
 	private final AuthService authService;
 	private final AuthenticatedUserService authenticatedUserService;
@@ -24,12 +20,12 @@ public class AuthController {
 		this.authenticatedUserService = authenticatedUserService;
 	}
 
-	@PostMapping("/login")
-	public AuthResponse login(@RequestBody @Valid LoginRequest request) {
+	@Override
+	public AuthResponse login(LoginRequest request) {
 		return authService.login(request);
 	}
 
-	@GetMapping("/me")
+	@Override
 	public AuthenticatedUserResponse me() {
 		return AuthenticatedUserResponse.from(authenticatedUserService.currentUser());
 	}
