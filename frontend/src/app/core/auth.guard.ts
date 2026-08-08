@@ -13,6 +13,38 @@ export const authGuard: CanActivateFn = () => {
   return router.createUrlTree(["/login"]);
 };
 
+export const adminGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  const session = authService.session();
+
+  if (!session) {
+    return router.createUrlTree(["/login"]);
+  }
+
+  if (session.user.role === "ADMIN") {
+    return true;
+  }
+
+  return router.createUrlTree(["/"]);
+};
+
+export const candidateGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  const session = authService.session();
+
+  if (!session) {
+    return router.createUrlTree(["/login"]);
+  }
+
+  if (session.user.role === "CANDIDATE") {
+    return true;
+  }
+
+  return router.createUrlTree(["/admin"]);
+};
+
 export const guestGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);

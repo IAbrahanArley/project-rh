@@ -29,7 +29,22 @@ import { RecruitmentApiService } from "../core/recruitment-api.service";
 
           <label>
             Senha
-            <input formControlName="password" type="password" autocomplete="current-password" />
+            <span class="password-field">
+              <input
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                autocomplete="current-password"
+              />
+              <button
+                class="password-toggle"
+                type="button"
+                [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                [attr.title]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                (click)="togglePasswordVisibility()"
+              >
+                <span class="eye-icon" [class.hidden]="showPassword"></span>
+              </button>
+            </span>
             @if (isInvalid("password")) {
               <small>Informe a senha.</small>
             }
@@ -58,6 +73,7 @@ export class LoginComponent {
 
   loading = false;
   errorMessage = "";
+  showPassword = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -92,5 +108,9 @@ export class LoginComponent {
   isInvalid(controlName: "username" | "password"): boolean {
     const control = this.form.controls[controlName];
     return control.invalid && (control.dirty || control.touched);
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }

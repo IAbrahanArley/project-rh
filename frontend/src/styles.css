@@ -52,6 +52,11 @@ button:disabled {
   text-decoration: none;
 }
 
+.ghost-link {
+  background: #e8eeec;
+  color: #172026;
+}
+
 .ghost {
   background: #e8eeec;
   color: #172026;
@@ -171,6 +176,68 @@ textarea {
   outline: none;
   padding: 12px;
   width: 100%;
+}
+
+.password-field {
+  display: grid;
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 50px;
+}
+
+.password-toggle {
+  align-items: center;
+  background: transparent;
+  color: #3e4b47;
+  display: inline-flex;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0;
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  background: #e8eeec;
+}
+
+.eye-icon {
+  border: 2px solid currentColor;
+  border-radius: 70% 20%;
+  display: inline-block;
+  height: 14px;
+  position: relative;
+  transform: rotate(45deg);
+  width: 14px;
+}
+
+.eye-icon::before {
+  background: currentColor;
+  border-radius: 999px;
+  content: "";
+  height: 5px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 5px;
+}
+
+.eye-icon.hidden::after {
+  background: currentColor;
+  content: "";
+  height: 2px;
+  left: -4px;
+  position: absolute;
+  top: 5px;
+  transform: rotate(90deg);
+  width: 20px;
 }
 
 small {
@@ -333,6 +400,22 @@ textarea {
   display: grid;
   gap: 18px;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.admin-actions-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-action-card {
+  color: #172026;
+  text-decoration: none;
+}
+
+.admin-action-card span {
+  color: #66736f;
+  font-size: 14px;
 }
 
 .jobs-page-grid {
@@ -557,6 +640,11 @@ app-admin-application-panel,
   grid-column: span 2;
 }
 
+.jobs-page-grid app-admin-application-panel,
+.jobs-page-grid .admin-applications-panel {
+  grid-column: auto;
+}
+
 .application-review {
   background: #f7faf9;
   border: 1px solid #e0e8e5;
@@ -683,6 +771,7 @@ app-admin-application-panel,
   .summary-grid,
   .content-grid,
   .dashboard-sections,
+  .admin-actions-grid,
   .jobs-page-grid {
     grid-template-columns: 1fr;
   }

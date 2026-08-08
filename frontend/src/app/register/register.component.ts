@@ -41,21 +41,53 @@ type RegisterControlName = "username" | "fullName" | "email" | "password" | "con
             Usuário
             <input formControlName="username" autocomplete="username" maxlength="80" />
             @if (isInvalid("username")) {
-              <small>Use 3 a 80 caracteres: letras, numeros, ponto, underline ou hifen.</small>
+              <small>Use 3 a 80 caracteres: letras, números, ponto, underline ou hífen.</small>
             }
           </label>
 
           <label>
             Senha
-            <input formControlName="password" type="password" autocomplete="new-password" maxlength="72" />
+            <span class="password-field">
+              <input
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                maxlength="72"
+              />
+              <button
+                class="password-toggle"
+                type="button"
+                [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                [attr.title]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                (click)="togglePasswordVisibility()"
+              >
+                <span class="eye-icon" [class.hidden]="showPassword"></span>
+              </button>
+            </span>
             @if (isInvalid("password")) {
-              <small>A senha precisa ter no minimo 8 caracteres, com letras e numeros.</small>
+              <small>A senha precisa ter no mínimo 8 caracteres, com letras e números.</small>
             }
           </label>
 
           <label>
             Confirmar senha
-            <input formControlName="confirmPassword" type="password" autocomplete="new-password" maxlength="72" />
+            <span class="password-field">
+              <input
+                formControlName="confirmPassword"
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                maxlength="72"
+              />
+              <button
+                class="password-toggle"
+                type="button"
+                [attr.aria-label]="showConfirmPassword ? 'Ocultar confirmação de senha' : 'Mostrar confirmação de senha'"
+                [attr.title]="showConfirmPassword ? 'Ocultar confirmação de senha' : 'Mostrar confirmação de senha'"
+                (click)="toggleConfirmPasswordVisibility()"
+              >
+                <span class="eye-icon" [class.hidden]="showConfirmPassword"></span>
+              </button>
+            </span>
             @if (isInvalid("confirmPassword") || passwordsDoNotMatch) {
               <small>As senhas precisam ser iguais.</small>
             }
@@ -96,6 +128,8 @@ export class RegisterComponent {
 
   loading = false;
   errorMessage = "";
+  showPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -140,6 +174,14 @@ export class RegisterComponent {
   isInvalid(controlName: RegisterControlName): boolean {
     const control = this.form.controls[controlName];
     return control.invalid && (control.dirty || control.touched);
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   private passwordsMatch(control: AbstractControl): ValidationErrors | null {

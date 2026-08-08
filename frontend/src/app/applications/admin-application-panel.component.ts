@@ -109,16 +109,33 @@ export interface ApplicationEvaluationSubmit {
           <p>Nenhuma candidatura encontrada para esta vaga.</p>
         }
       </div>
+
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button class="ghost" type="button" [disabled]="loading || first" (click)="pageChange.emit(page - 1)">
+            Anterior
+          </button>
+          <span>Página {{ page + 1 }} de {{ totalPages }}</span>
+          <button class="ghost" type="button" [disabled]="loading || last" (click)="pageChange.emit(page + 1)">
+            Próxima
+          </button>
+        </div>
+      }
     </div>
   `,
 })
 export class AdminApplicationPanelComponent implements OnChanges {
   @Input({ required: true }) applications: JobApplication[] = [];
   @Input() job: JobOpening | null = null;
+  @Input() page = 0;
+  @Input() totalPages = 0;
+  @Input() first = true;
+  @Input() last = true;
   @Input() loading = false;
   @Output() statusChange = new EventEmitter<ApplicationStatusChange>();
   @Output() evaluationSubmit = new EventEmitter<ApplicationEvaluationSubmit>();
   @Output() resumeDownload = new EventEmitter<string>();
+  @Output() pageChange = new EventEmitter<number>();
 
   readonly statusOptions: ApplicationStatus[] = ["PENDING", "IN_REVIEW", "APPROVED", "REJECTED", "WITHDRAWN"];
   protected readonly applicationStatusLabel = applicationStatusLabel;

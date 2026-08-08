@@ -111,6 +111,10 @@ export class RecruitmentApiService {
     });
   }
 
+  findJobById(jobId: string): Observable<JobOpening> {
+    return this.http.get<JobOpening>(`${this.baseUrl}/api/jobs/${jobId}`);
+  }
+
   createJob(token: string, request: JobOpeningRequest): Observable<JobOpening> {
     return this.http.post<JobOpening>(`${this.baseUrl}/api/jobs`, request, {
       headers: this.authHeaders(token),
@@ -143,8 +147,8 @@ export class RecruitmentApiService {
     });
   }
 
-  listJobApplications(token: string, jobId: string): Observable<PageResponse<JobApplication>> {
-    return this.http.get<PageResponse<JobApplication>>(`${this.baseUrl}/api/jobs/${jobId}/applications?page=0&size=20`, {
+  listJobApplications(token: string, jobId: string, page = 0, size = 10): Observable<PageResponse<JobApplication>> {
+    return this.http.get<PageResponse<JobApplication>>(`${this.baseUrl}/api/jobs/${jobId}/applications?page=${page}&size=${size}`, {
       headers: this.authHeaders(token),
     });
   }
