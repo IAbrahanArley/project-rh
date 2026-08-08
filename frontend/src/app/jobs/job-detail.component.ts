@@ -1,7 +1,14 @@
-﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { jobStatusLabel } from "../core/display-labels";
 import { JobOpening } from "../core/models";
+
+export interface JobApplicationSubmit {
+  motivation: string;
+  resumeFile: File | null;
+}
+
+const maxResumeSizeBytes = 10 * 1024 * 1024;
 
 @Component({
   selector: "app-job-detail",
@@ -31,10 +38,27 @@ import { JobOpening } from "../core/models";
 
         @if (canApply) {
           <form class="apply-box" [formGroup]="form" (ngSubmit)="submit()">
-            <textarea formControlName="motivation"></textarea>
+            <h3>Candidatura</h3>
+            <label>
+              Motivação
+              <textarea formControlName="motivation"></textarea>
+            </label>
             @if (form.controls.motivation.invalid && form.controls.motivation.touched) {
               <small>Informe uma motivação entre 10 e 2000 caracteres.</small>
             }
+
+            @if (requireResumeOnApply) {
+              <label class="file-picker apply-file-picker">
+                Currículo em PDF
+                <input type="file" accept="application/pdf,.pdf" [disabled]="loading" (change)="selectResumeFile($event)" />
+                <span>{{ selectedResumeFile?.name ?? "Selecionar currículo" }}</span>
+              </label>
+
+              @if (resumeMessage) {
+                <small>{{ resumeMessage }}</small>
+              }
+            }
+
             <button [disabled]="form.invalid || loading">Candidatar-se</button>
           </form>
         }
@@ -48,10 +72,14 @@ export class JobDetailComponent {
   @Input() job: JobOpening | null = null;
   @Input() canApply = false;
   @Input() canManage = false;
+  @Input() requireResumeOnApply = false;
   @Input() loading = false;
-  @Output() applyToJob = new EventEmitter<string>();
+  @Output() applyToJob = new EventEmitter<JobApplicationSubmit>();
   @Output() editJob = new EventEmitter<JobOpening>();
   @Output() cancelJob = new EventEmitter<JobOpening>();
+
+  selectedResumeFile: File | null = null;
+  resumeMessage = "";
 
   readonly form = this.formBuilder.nonNullable.group({
     motivation: [
@@ -64,12 +92,47 @@ export class JobDetailComponent {
 
   protected readonly jobStatusLabel = jobStatusLabel;
 
+  selectResumeFile(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    this.resumeMessage = "";
+
+    if (!file) {
+      this.selectedResumeFile = null;
+      return;
+    }
+
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      this.selectedResumeFile = null;
+      this.resumeMessage = "Selecione um arquivo PDF.";
+      input.value = "";
+      return;
+    }
+
+    if (file.size > maxResumeSizeBytes) {
+      this.selectedResumeFile = null;
+      this.resumeMessage = "O currículo deve ter no máximo 10MB.";
+      input.value = "";
+      return;
+    }
+
+    this.selectedResumeFile = file;
+  }
+
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    this.applyToJob.emit(this.form.getRawValue().motivation.trim());
+    if (this.requireResumeOnApply && !this.selectedResumeFile) {
+      this.resumeMessage = "Anexe seu currículo em PDF para se candidatar.";
+      return;
+    }
+
+    this.applyToJob.emit({
+      motivation: this.form.getRawValue().motivation.trim(),
+      resumeFile: this.selectedResumeFile,
+    });
   }
 }

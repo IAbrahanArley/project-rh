@@ -84,7 +84,7 @@ export class LoginComponent {
           void this.router.navigateByUrl("/");
         },
         error: () => {
-          this.errorMessage = "Credenciais inválidas ou API indisponível.";
+          this.errorMessage = "Usuário ou senha incorretos. Confira os dados e tente novamente.";
         },
       });
   }

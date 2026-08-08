@@ -80,7 +80,7 @@ import { JobOpening, JobSearchFilters, JobStatus } from "../core/models";
       </div>
 
       @if (totalPages > 1) {
-        <div class="págination">
+        <div class="pagination">
           <button class="ghost" type="button" [disabled]="loading || first" (click)="pageChange.emit(page - 1)">
             Anterior
           </button>

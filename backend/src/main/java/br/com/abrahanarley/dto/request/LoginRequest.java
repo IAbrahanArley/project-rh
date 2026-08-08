@@ -7,6 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 public record LoginRequest(
 		@Schema(description = "Nome de usuário.", example = "admin")
 		@NotBlank String username,
-		@Schema(description = "Senha do usuário.", example = "admin123")
+		@Schema(description = "Senha do usuário.", example = "SenhaForte123")
 		@NotBlank String password) {
 }

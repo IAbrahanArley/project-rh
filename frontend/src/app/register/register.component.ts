@@ -132,7 +132,7 @@ export class RegisterComponent {
           void this.router.navigateByUrl("/");
         },
         error: () => {
-          this.errorMessage = "Não foi possível criar a conta. Verifique os dados ou tente outro usuário/e-mail.";
+          this.errorMessage = "Não foi possível criar a conta. Confira os dados ou tente outro usuário/e-mail.";
         },
       });
   }

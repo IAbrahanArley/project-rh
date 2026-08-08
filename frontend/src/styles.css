@@ -31,9 +31,25 @@ button {
   padding: 0 16px;
 }
 
+a {
+  color: #126a5b;
+}
+
 button:disabled {
   cursor: wait;
   opacity: 0.7;
+}
+
+.button-link {
+  align-items: center;
+  background: #126a5b;
+  border-radius: 6px;
+  color: #fff;
+  display: inline-flex;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 0 16px;
+  text-decoration: none;
 }
 
 .ghost {
@@ -127,13 +143,14 @@ button:disabled {
 .job-search-form {
   border-bottom: 1px solid #e2e9e7;
   display: grid;
-  gap: 10px;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-bottom: 14px;
   padding-bottom: 14px;
 }
 
 .search-actions {
+  align-items: center;
   grid-column: 1 / -1;
 }
 
@@ -238,6 +255,93 @@ textarea {
   grid-template-columns: 320px 1fr;
 }
 
+.candidate-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.candidate-sidebar {
+  align-content: start;
+  background: #fff;
+  border-right: 1px solid #d8e1de;
+  display: grid;
+  gap: 22px;
+  height: 100vh;
+  padding: 28px 22px;
+  position: sticky;
+  top: 0;
+}
+
+.candidate-sidebar h1 {
+  font-size: 28px;
+  line-height: 1.1;
+  margin: 6px 0 8px;
+}
+
+.candidate-sidebar p,
+.candidate-sidebar span:not(.eyebrow) {
+  color: #66736f;
+  margin: 0;
+}
+
+.candidate-nav {
+  display: grid;
+  gap: 8px;
+}
+
+.candidate-nav a {
+  border-radius: 6px;
+  color: #172026;
+  font-weight: 800;
+  min-height: 42px;
+  padding: 11px 12px;
+  text-decoration: none;
+}
+
+.candidate-nav a.active,
+.candidate-nav a:hover {
+  background: #e7f4f0;
+  color: #126a5b;
+}
+
+.candidate-main {
+  min-width: 0;
+  padding: 28px;
+}
+
+.page-heading {
+  align-items: end;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.page-heading h2 {
+  font-size: 30px;
+  line-height: 1.15;
+  margin: 6px 0 6px;
+}
+
+.page-heading p {
+  color: #66736f;
+  margin: 0;
+}
+
+.dashboard-sections {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.jobs-page-grid {
+  align-items: start;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+}
+
 .panel {
   min-width: 0;
   padding: 18px;
@@ -313,6 +417,7 @@ textarea {
 
 .pagination button {
   min-height: 36px;
+  min-width: 0;
 }
 
 .job-item {
@@ -378,6 +483,10 @@ textarea {
   gap: 12px;
   margin-top: 18px;
   padding-top: 18px;
+}
+
+.apply-file-picker {
+  margin-top: 2px;
 }
 
 .form-actions {
@@ -572,8 +681,52 @@ app-admin-application-panel,
   }
 
   .summary-grid,
-  .content-grid {
+  .content-grid,
+  .dashboard-sections,
+  .jobs-page-grid {
     grid-template-columns: 1fr;
+  }
+
+  .candidate-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .candidate-sidebar {
+    border-bottom: 1px solid #d8e1de;
+    border-right: 0;
+    gap: 14px;
+    height: auto;
+    padding: 18px;
+    position: static;
+  }
+
+  .candidate-sidebar h1 {
+    font-size: 24px;
+  }
+
+  .candidate-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .candidate-nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .candidate-main {
+    padding: 18px;
+  }
+
+  .page-heading {
+    align-items: stretch;
+    display: grid;
+  }
+
+  .page-heading h2 {
+    font-size: 26px;
   }
 
   .jobs-panel {
@@ -625,5 +778,10 @@ app-admin-application-panel,
 
   .job-search-form {
     grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    grid-template-columns: 1fr;
+    text-align: center;
   }
 }

@@ -54,21 +54,10 @@ Frontend dev: http://localhost:5173
 API:          http://localhost:8080
 ```
 
-## Usuários de Desenvolvimento
+## Dados Iniciais
 
-Administrador:
-
-```text
-usuário: admin
-senha: admin123
-```
-
-Colaborador:
-
-```text
-usuário: colaborador
-senha: user123
-```
+A aplicação não cria usuários ou vagas automaticamente. Crie contas de candidato pelo fluxo público de cadastro.
+Usuários administrativos devem ser provisionados diretamente no banco ou por uma rotina interna controlada.
 
 ## Variáveis Principais
 
@@ -81,7 +70,6 @@ DB_PASSWORD=postgres
 JWT_SECRET=change-this-development-secret-with-at-least-32-chars
 JWT_EXPIRATION_MINUTES=120
 CORS_ALLOWED_ORIGINS=http://localhost:4200,http://localhost:5173
-SEED_DEMO_DATA=true
 RESUME_BUCKET=nome-do-bucket-privado
 AWS_REGION=us-east-1
 AWS_ACCESS_KEY_ID=chave-com-acesso-ao-bucket
@@ -94,6 +82,8 @@ Frontend em Docker:
 ```text
 FRONTEND_API_BASE_URL=http://localhost:8080
 ```
+
+Em produção, deixe `FRONTEND_API_BASE_URL` vazio quando frontend e API estiverem na mesma origem.
 
 ## Rotas Principais
 
@@ -173,7 +163,7 @@ Configure estes secrets no GitHub em `Settings > Secrets and variables > Actions
 ```text
 AWS_EC2_HOST=3.92.70.142
 AWS_EC2_USER=ec2-user
-AWS_EC2_SSH_KEY=conteúdo completo do arquivo rh-free-tier-key.pem
+AWS_EC2_SSH_KEY=conteúdo completo da chave privada SSH da EC2
 ```
 
 O deploy executa:
@@ -187,9 +177,9 @@ O deploy executa:
 
 O arquivo `.env.aws` permanece somente na EC2 e não é enviado pelo GitHub Actions.
 
-## Deploy AWS Free Tier
+## Deploy AWS
 
-Arquitetura sugerida para evitar custo fixo alto no início:
+Arquitetura sugerida para uma publicação simples:
 
 ```text
 CloudFront
@@ -201,17 +191,15 @@ EC2
   PostgreSQL no mesmo Docker Compose
 ```
 
-Evite nesta primeira versão: RDS, Load Balancer, NAT Gateway, ECS/Fargate, Elastic IP parado e domínio próprio.
-
 Checklist inicial na AWS:
 
 1. Ativar MFA no usuário root.
 2. Criar Budget de alerta em `US$ 1`.
 3. Usar uma única região, preferencialmente `us-east-1`.
-4. Criar uma EC2 marcada como `Free tier eligible`; os tipos elegíveis dependem da data de criação da conta.
+4. Criar uma EC2 adequada ao volume esperado.
 5. Security Group da EC2:
    - `22`: somente seu IP.
-   - `80`: público, para o CloudFront acessar a API.
+   - `80`: público para acesso HTTP.
 
 Na EC2, copie `.env.aws` para `.env.aws`, preencha os segredos e suba a API:
 

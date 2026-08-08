@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-: "${FRONTEND_API_BASE_URL:=http://localhost:8080}"
+: "${FRONTEND_API_BASE_URL:=}"
 
 envsubst '${FRONTEND_API_BASE_URL}' \
   < /etc/nginx/templates/runtime-config.template.js \

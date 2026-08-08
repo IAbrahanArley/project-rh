@@ -19,7 +19,7 @@ import {
 } from "../core/models";
 import { RecruitmentApiService } from "../core/recruitment-api.service";
 import { SummaryCardComponent } from "./summary-card.component";
-import { JobDetailComponent } from "../jobs/job-detail.component";
+import { JobApplicationSubmit, JobDetailComponent } from "../jobs/job-detail.component";
 import { JobFormComponent } from "../jobs/job-form.component";
 import { JobListComponent } from "../jobs/job-list.component";
 import { TopbarComponent } from "../layout/topbar.component";
@@ -208,7 +208,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: () => {
-        this.message.set("Não foi possível carregar os dados da API.");
+        this.message.set("Não foi possível carregar os dados. Tente novamente em instantes.");
         this.loading.set(false);
       },
     });
@@ -362,7 +362,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  applyToSelectedJob(motivation: string): void {
+  applyToSelectedJob(submit: JobApplicationSubmit): void {
     const session = this.session();
     const job = this.selectedJob();
 
@@ -373,7 +373,7 @@ export class DashboardComponent implements OnInit {
     this.loading.set(true);
     this.message.set("");
 
-    this.api.applyToJob(session.token, job.id, motivation).subscribe({
+    this.api.applyToJob(session.token, job.id, submit.motivation).subscribe({
       next: () => {
         this.message.set("Candidatura enviada com sucesso.");
         this.loadDashboard();
