@@ -85,8 +85,9 @@ jobs:
 
           cd "$HOME/rh"
           sudo chown -R "$USER:$USER" "$HOME/rh"
-          rm -rf backend frontend/dist/rh-frontend ops/ec2 docker-compose.aws.yml
+          sudo rm -rf backend frontend/dist/rh-frontend ops/ec2 docker-compose.aws.yml
           tar -xzf rh-aws-deploy.tgz
+          sudo chown -R "$USER:$USER" "$HOME/rh"
 
           test -f .env.aws
           docker network inspect rh-net >/dev/null 2>&1 || docker network create rh-net
