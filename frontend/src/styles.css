@@ -124,6 +124,19 @@ button:disabled {
   gap: 12px;
 }
 
+.job-search-form {
+  border-bottom: 1px solid #e2e9e7;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+}
+
+.search-actions {
+  grid-column: 1 / -1;
+}
+
 label {
   color: #3e4b47;
   display: grid;
@@ -469,6 +482,52 @@ app-admin-application-panel,
   padding: 10px;
 }
 
+.resume-panel {
+  align-self: start;
+}
+
+.resume-actions {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.file-picker {
+  min-width: 0;
+}
+
+.file-picker input {
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.file-picker span {
+  background: #f7faf9;
+  border: 1px solid #cbd7d3;
+  border-radius: 6px;
+  color: #3e4b47;
+  display: block;
+  overflow: hidden;
+  padding: 11px 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.application-review-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.application-review-actions button {
+  min-height: 32px;
+}
+
 .review-form {
   align-items: end;
   border-top: 1px solid #e2e9e7;
@@ -541,8 +600,13 @@ app-admin-application-panel,
 
   .detail-actions button,
   .form-actions button,
-  .notification-card button {
+  .notification-card button,
+  .resume-actions button {
     width: 100%;
+  }
+
+  .resume-actions {
+    grid-template-columns: 1fr;
   }
 
   .notification-header {
@@ -556,6 +620,10 @@ app-admin-application-panel,
   }
 
   .register-form {
+    grid-template-columns: 1fr;
+  }
+
+  .job-search-form {
     grid-template-columns: 1fr;
   }
 }

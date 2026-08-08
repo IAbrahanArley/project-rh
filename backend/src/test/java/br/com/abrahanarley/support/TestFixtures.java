@@ -1,4 +1,4 @@
-package br.com.abrahanarley.support;
+﻿package br.com.abrahanarley.support;
 
 import br.com.abrahanarley.entities.AppUser;
 import br.com.abrahanarley.entities.CandidateEvaluation;
@@ -61,12 +61,12 @@ public final class TestFixtures {
 	public static JobOpening job(UUID id, String title, JobStatus status, AppUser createdBy) {
 		JobOpening job = new JobOpening(
 				title,
-				"Descricao da vaga",
+				"Descrição da vaga",
 				"Conhecimento em Spring Boot",
 				"Tecnologia",
 				"Remoto",
 				createdBy);
-		job.update(title, "Descricao da vaga", "Conhecimento em Spring Boot", "Tecnologia", "Remoto", status);
+		job.update(title, "Descrição da vaga", "Conhecimento em Spring Boot", "Tecnologia", "Remoto", status);
 		ReflectionTestUtils.setField(job, "id", id);
 		ReflectionTestUtils.setField(job, "createdAt", OffsetDateTime.now().minusDays(1));
 		ReflectionTestUtils.setField(job, "updatedAt", OffsetDateTime.now());

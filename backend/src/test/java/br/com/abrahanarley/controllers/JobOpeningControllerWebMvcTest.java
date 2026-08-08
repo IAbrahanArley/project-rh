@@ -1,5 +1,6 @@
-package br.com.abrahanarley.controllers;
+﻿package br.com.abrahanarley.controllers;
 
+import br.com.abrahanarley.dto.request.JobOpeningFilter;
 import br.com.abrahanarley.config.SecurityConfig;
 import br.com.abrahanarley.dto.request.JobOpeningRequest;
 import br.com.abrahanarley.dto.response.JobApplicationResponse;
@@ -83,7 +84,7 @@ class JobOpeningControllerWebMvcTest {
 		when(jobOpeningService.create(request)).thenReturn(new JobOpeningResponse(
 				UUID.fromString("00000000-0000-0000-0000-000000000010"),
 				"Analista Java",
-				"Descricao da vaga",
+				"Descrição da vaga",
 				"Spring Boot",
 				"Tecnologia",
 				"Remoto",
@@ -107,7 +108,7 @@ class JobOpeningControllerWebMvcTest {
 	void createShouldReturnBadRequestWhenPayloadIsInvalid() throws Exception {
 		JobOpeningRequest request = new JobOpeningRequest(
 				"",
-				"Descricao da vaga",
+				"Descrição da vaga",
 				"Spring Boot",
 				"Tecnologia",
 				"Remoto",
@@ -124,10 +125,11 @@ class JobOpeningControllerWebMvcTest {
 	@Test
 	@WithMockUser(username = "admin", roles = "ADMIN")
 	void listShouldReturnJobsForAuthenticatedUser() throws Exception {
-		when(jobOpeningService.list(eq(JobStatus.OPEN), any())).thenReturn(new PageImpl<>(List.of(new JobOpeningResponse(
+		JobOpeningFilter filter = new JobOpeningFilter(JobStatus.OPEN, "java", "Tecnologia", "Remoto");
+		when(jobOpeningService.list(eq(filter), any())).thenReturn(new PageImpl<>(List.of(new JobOpeningResponse(
 				UUID.fromString("00000000-0000-0000-0000-000000000010"),
 				"Analista Java",
-				"Descricao da vaga",
+				"Descrição da vaga",
 				"Spring Boot",
 				"Tecnologia",
 				"Remoto",
@@ -136,7 +138,13 @@ class JobOpeningControllerWebMvcTest {
 				OffsetDateTime.parse("2026-08-05T10:00:00Z"),
 				OffsetDateTime.parse("2026-08-05T10:00:00Z"))), PageRequest.of(0, 10), 1));
 
-		mockMvc.perform(get("/api/jobs").param("status", "OPEN").param("page", "0").param("size", "10"))
+		mockMvc.perform(get("/api/jobs")
+						.param("status", "OPEN")
+						.param("q", "java")
+						.param("department", "Tecnologia")
+						.param("location", "Remoto")
+						.param("page", "0")
+						.param("size", "10"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.content[0].id").value("00000000-0000-0000-0000-000000000010"))
 				.andExpect(jsonPath("$.content[0].title").value("Analista Java"))
@@ -150,7 +158,7 @@ class JobOpeningControllerWebMvcTest {
 
 	@Test
 	@WithMockUser(username = "admin", roles = "ADMIN")
-	void listApplicationsShouldReturnPaginatedApplicationsForAdmin() throws Exception {
+	void listApplicationsShouldReturnPáginatedApplicationsForAdmin() throws Exception {
 		UUID jobId = UUID.fromString("00000000-0000-0000-0000-000000000010");
 		when(jobApplicationService.listByJob(eq(jobId), any())).thenReturn(new PageImpl<>(List.of(
 				new JobApplicationResponse(
@@ -185,7 +193,7 @@ class JobOpeningControllerWebMvcTest {
 	private JobOpeningRequest validRequest() {
 		return new JobOpeningRequest(
 				"Analista Java",
-				"Descricao da vaga",
+				"Descrição da vaga",
 				"Spring Boot",
 				"Tecnologia",
 				"Remoto",

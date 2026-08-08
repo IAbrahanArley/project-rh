@@ -1,4 +1,4 @@
-package br.com.abrahanarley.services;
+﻿package br.com.abrahanarley.services;
 
 import br.com.abrahanarley.dto.request.ApplicationStatusRequest;
 import br.com.abrahanarley.dto.request.EvaluationRequest;
@@ -150,7 +150,7 @@ class JobApplicationServiceTest {
 		assertThat(response.status()).isEqualTo(ApplicationStatus.APPROVED);
 		assertThat(response.feedback()).isEqualTo("Parabens, candidatura aprovada.");
 		verify(notificationService).notify(candidate, "Status da candidatura atualizado",
-				"Sua candidatura para Analista Java agora está como APPROVED.");
+				"Sua candidatura para Analista Java agora estÃ¡ como APPROVED.");
 	}
 
 	@Test
@@ -165,13 +165,13 @@ class JobApplicationServiceTest {
 		when(candidateEvaluationRepository.findByApplication(application)).thenReturn(Optional.of(evaluation));
 
 		EvaluationResponse response = jobApplicationService.evaluate(TestFixtures.APPLICATION_ID,
-				new EvaluationRequest(5, true, "Excelente aderencia."));
+				new EvaluationRequest(5, true, "Excelente aderência."));
 
 		assertThat(response.score()).isEqualTo(5);
 		assertThat(response.recommended()).isTrue();
-		assertThat(response.comments()).isEqualTo("Excelente aderencia.");
+		assertThat(response.comments()).isEqualTo("Excelente aderência.");
 		verify(candidateEvaluationRepository, never()).save(any());
-		verify(notificationService).notify(candidate, "Nova avaliacao registrada",
-				"Sua candidatura para Analista Java recebeu uma avaliacao.");
+		verify(notificationService).notify(candidate, "Nova avaliação registrada",
+				"Sua candidatura para Analista Java recebeu uma avaliação.");
 	}
 }

@@ -1,12 +1,13 @@
 package br.com.abrahanarley.services;
 
+import br.com.abrahanarley.dto.request.JobOpeningFilter;
 import br.com.abrahanarley.dto.request.JobOpeningRequest;
 import br.com.abrahanarley.dto.response.JobOpeningResponse;
 import br.com.abrahanarley.entities.AppUser;
 import br.com.abrahanarley.entities.JobOpening;
-import br.com.abrahanarley.enums.JobStatus;
 import br.com.abrahanarley.exceptions.ResourceNotFoundException;
 import br.com.abrahanarley.repositories.JobOpeningRepository;
+import br.com.abrahanarley.repositories.specifications.JobOpeningSpecifications;
 import br.com.abrahanarley.security.AuthenticatedUserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,10 +29,8 @@ public class JobOpeningService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<JobOpeningResponse> list(JobStatus status, Pageable pageable) {
-		Page<JobOpening> jobs = status == null
-				? jobOpeningRepository.findAll(pageable)
-				: jobOpeningRepository.findByStatus(status, pageable);
+	public Page<JobOpeningResponse> list(JobOpeningFilter filter, Pageable pageable) {
+		Page<JobOpening> jobs = jobOpeningRepository.findAll(JobOpeningSpecifications.matching(filter), pageable);
 
 		return jobs.map(JobOpeningResponse::from);
 	}

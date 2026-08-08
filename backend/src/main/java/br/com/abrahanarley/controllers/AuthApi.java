@@ -1,4 +1,4 @@
-package br.com.abrahanarley.controllers;
+﻿package br.com.abrahanarley.controllers;
 
 import br.com.abrahanarley.dto.request.CandidateRegisterRequest;
 import br.com.abrahanarley.dto.request.LoginRequest;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Autenticacao", description = "Endpoints para login JWT e consulta do usuario autenticado.")
+@Tag(name = "Autenticação", description = "Endpoints para login JWT e consulta do usuário autenticado.")
 public interface AuthApi {
 
 	@Operation(
@@ -27,35 +27,35 @@ public interface AuthApi {
 					responseCode = "200",
 					description = "Candidato cadastrado e autenticado com sucesso.",
 					content = @Content(schema = @Schema(implementation = AuthResponse.class))),
-			@ApiResponse(responseCode = "400", description = "Payload invalido ou dados ja cadastrados.", content = @Content)
+			@ApiResponse(responseCode = "400", description = "Payload inválido ou dados ja cadastrados.", content = @Content)
 	})
 	@PostMapping("/candidate/register")
 	AuthResponse registerCandidate(@RequestBody @Valid CandidateRegisterRequest request);
 
 	@Operation(
-			summary = "Autenticar usuario",
-			description = "Valida as credenciais do usuario e retorna um token JWT para consumo das rotas protegidas.")
+			summary = "Autenticar usuário",
+			description = "Valida as credenciais do usuário e retorna um token JWT para consumo das rotas protegidas.")
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
-					description = "Usuario autenticado com sucesso.",
+					description = "Usuário autenticado com sucesso.",
 					content = @Content(schema = @Schema(implementation = AuthResponse.class))),
-			@ApiResponse(responseCode = "400", description = "Payload invalido.", content = @Content),
-			@ApiResponse(responseCode = "401", description = "Credenciais invalidas.", content = @Content)
+			@ApiResponse(responseCode = "400", description = "Payload inválido.", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Credenciais inválidas.", content = @Content)
 	})
 	@PostMapping("/login")
 	AuthResponse login(@RequestBody @Valid LoginRequest request);
 
 	@Operation(
-			summary = "Consultar usuario autenticado",
-			description = "Retorna os dados basicos do usuario autenticado pelo token JWT.",
+			summary = "Consultar usuário autenticado",
+			description = "Retorna os dados básicos do usuário autenticado pelo token JWT.",
 			security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
-					description = "Usuario autenticado retornado com sucesso.",
+					description = "Usuário autenticado retornado com sucesso.",
 					content = @Content(schema = @Schema(implementation = AuthenticatedUserResponse.class))),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content)
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content)
 	})
 	@GetMapping("/me")
 	AuthenticatedUserResponse me();

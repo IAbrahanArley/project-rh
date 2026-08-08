@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
+﻿import { Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { applicationStatusLabel } from "../core/display-labels";
 import { ApplicationStatus, ApplicationStatusRequest, EvaluationRequest, JobApplication, JobOpening } from "../core/models";
@@ -50,7 +50,12 @@ export interface ApplicationEvaluationSubmit {
                 <strong>{{ application.candidateName }}</strong>
                 <span>{{ application.candidateDepartment }}</span>
               </div>
-              <span class="status">{{ applicationStatusLabel(application.status) }}</span>
+              <div class="application-review-actions">
+                <button class="ghost" type="button" [disabled]="loading" (click)="resumeDownload.emit(application.candidateId)">
+                  Currículo
+                </button>
+                <span class="status">{{ applicationStatusLabel(application.status) }}</span>
+              </div>
             </div>
 
             <p>{{ application.motivation }}</p>
@@ -93,11 +98,11 @@ export interface ApplicationEvaluationSubmit {
               </label>
 
               <label class="wide-field">
-                Comentarios internos
-                <textarea formControlName="comments" placeholder="Observacoes da avaliacao"></textarea>
+                Comentários internos
+                <textarea formControlName="comments" placeholder="Observações da avaliação"></textarea>
               </label>
 
-              <button [disabled]="evaluationFormFor(application).invalid || loading">Registrar avaliacao</button>
+              <button [disabled]="evaluationFormFor(application).invalid || loading">Registrar avaliação</button>
             </form>
           </article>
         } @empty {
@@ -113,6 +118,7 @@ export class AdminApplicationPanelComponent implements OnChanges {
   @Input() loading = false;
   @Output() statusChange = new EventEmitter<ApplicationStatusChange>();
   @Output() evaluationSubmit = new EventEmitter<ApplicationEvaluationSubmit>();
+  @Output() resumeDownload = new EventEmitter<string>();
 
   readonly statusOptions: ApplicationStatus[] = ["PENDING", "IN_REVIEW", "APPROVED", "REJECTED", "WITHDRAWN"];
   protected readonly applicationStatusLabel = applicationStatusLabel;

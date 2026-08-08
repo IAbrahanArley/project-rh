@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { AuthenticatedUser } from "../core/models";
 import { roleLabel } from "../core/display-labels";
 
@@ -10,7 +10,7 @@ import { roleLabel } from "../core/display-labels";
       <div>
         <span class="eyebrow">Portal RH</span>
         <h1>{{ user.role === "ADMIN" ? "Gestao de vagas" : "Vagas internas" }}</h1>
-        <p>{{ user.role === "ADMIN" ? "Acompanhe vagas, candidaturas e notificacoes do processo." : "Consulte oportunidades e acompanhe suas candidaturas." }}</p>
+        <p>{{ user.role === "ADMIN" ? "Acompanhe vagas, candidaturas e notificações do processo." : "Consulte oportunidades e acompanhe suas candidaturas." }}</p>
       </div>
 
       <div class="user-box">

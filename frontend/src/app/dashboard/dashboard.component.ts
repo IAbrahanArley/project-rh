@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from "@angular/core";
+﻿import { Component, computed, OnInit, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { catchError, forkJoin, of } from "rxjs";
 import {
@@ -8,7 +8,15 @@ import {
 } from "../applications/admin-application-panel.component";
 import { ApplicationListComponent } from "../applications/application-list.component";
 import { AuthService } from "../core/auth.service";
-import { JobApplication, JobOpening, JobOpeningRequest, JobStatus, Notification, PageResponse } from "../core/models";
+import {
+  JobApplication,
+  JobOpening,
+  JobOpeningRequest,
+  JobSearchFilters,
+  JobStatus,
+  Notification,
+  PageResponse,
+} from "../core/models";
 import { RecruitmentApiService } from "../core/recruitment-api.service";
 import { SummaryCardComponent } from "./summary-card.component";
 import { JobDetailComponent } from "../jobs/job-detail.component";
@@ -16,6 +24,7 @@ import { JobFormComponent } from "../jobs/job-form.component";
 import { JobListComponent } from "../jobs/job-list.component";
 import { TopbarComponent } from "../layout/topbar.component";
 import { NotificationListComponent, NotificationReadFilter } from "../notifications/notification-list.component";
+import { CandidateResumeComponent } from "../resumes/candidate-resume.component";
 
 @Component({
   selector: "app-dashboard",
@@ -27,6 +36,7 @@ import { NotificationListComponent, NotificationReadFilter } from "../notificati
     JobFormComponent,
     JobListComponent,
     NotificationListComponent,
+    CandidateResumeComponent,
     SummaryCardComponent,
     TopbarComponent,
   ],
@@ -46,12 +56,13 @@ import { NotificationListComponent, NotificationReadFilter } from "../notificati
           [label]="session()?.user?.role === 'ADMIN' ? 'Candidaturas da vaga' : 'Minhas candidaturas'"
           [value]="session()?.user?.role === 'ADMIN' ? adminApplications().length : applications().length"
         />
-        <app-summary-card label="Nao lidas" [value]="unreadCount()" />
+        <app-summary-card label="Não lidas" [value]="unreadCount()" />
       </section>
 
       <section class="content-grid">
         <app-job-list
           [jobs]="jobs()"
+          [filters]="jobSearchFilters()"
           [selectedJobId]="selectedJobId()"
           [selectedStatus]="jobStatusFilter()"
           [page]="jobsPage()"
@@ -62,6 +73,7 @@ import { NotificationListComponent, NotificationReadFilter } from "../notificati
           [loading]="loading()"
           (selectJob)="selectJob($event)"
           (statusChange)="changeJobStatusFilter($event)"
+          (filtersChange)="changeJobSearchFilters($event)"
           (pageChange)="changeJobsPage($event)"
         />
 
@@ -92,8 +104,10 @@ import { NotificationListComponent, NotificationReadFilter } from "../notificati
             [loading]="loading()"
             (statusChange)="updateApplicationStatus($event)"
             (evaluationSubmit)="evaluateApplication($event)"
+            (resumeDownload)="openCandidateResume($event)"
           />
         } @else {
+          <app-candidate-resume [token]="session()!.token" />
           <app-application-list [applications]="applications()" />
         }
 
@@ -123,6 +137,7 @@ export class DashboardComponent implements OnInit {
   readonly unreadCount = signal(0);
   readonly selectedJobId = signal<string | null>(null);
   readonly jobStatusFilter = signal<JobStatus | null>("OPEN");
+  readonly jobSearchFilters = signal<JobSearchFilters>({ query: "", department: "", location: "" });
   readonly notificationReadFilter = signal<NotificationReadFilter>(null);
   readonly editingJob = signal<JobOpening | null>(null);
   readonly loading = signal(false);
@@ -157,7 +172,12 @@ export class DashboardComponent implements OnInit {
     const isAdmin = session.user.role === "ADMIN";
 
     forkJoin({
-      jobs: this.api.listJobs(session.token, isAdmin ? this.jobStatusFilter() : "OPEN", this.jobsPage()),
+      jobs: this.api.listJobs(
+        session.token,
+        this.jobSearchFilters(),
+        isAdmin ? this.jobStatusFilter() : "OPEN",
+        this.jobsPage(),
+      ),
       applications: isAdmin
         ? of(this.emptyPage<JobApplication>())
         : this.api.listMyApplications(session.token).pipe(catchError(() => of(this.emptyPage<JobApplication>()))),
@@ -188,7 +208,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: () => {
-        this.message.set("Nao foi possivel carregar os dados da API.");
+        this.message.set("Não foi possível carregar os dados da API.");
         this.loading.set(false);
       },
     });
@@ -209,6 +229,24 @@ export class DashboardComponent implements OnInit {
     }
 
     this.jobStatusFilter.set(status);
+    this.jobsPage.set(0);
+    this.selectedJobId.set(null);
+    this.stopEditingJob();
+    this.loadDashboard();
+  }
+
+  changeJobSearchFilters(filters: JobSearchFilters): void {
+    const current = this.jobSearchFilters();
+
+    if (
+      current.query === filters.query &&
+      current.department === filters.department &&
+      current.location === filters.location
+    ) {
+      return;
+    }
+
+    this.jobSearchFilters.set(filters);
     this.jobsPage.set(0);
     this.selectedJobId.set(null);
     this.stopEditingJob();
@@ -253,7 +291,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    const shouldCancel = window.confirm(`Cancelar a vaga "${job.title}"? Esta acao mantem o historico da vaga.`);
+    const shouldCancel = window.confirm(`Cancelar a vaga "${job.title}"? Esta ação mantém o histórico da vaga.`);
 
     if (!shouldCancel) {
       return;
@@ -269,7 +307,7 @@ export class DashboardComponent implements OnInit {
         this.loadDashboard();
       },
       error: () => {
-        this.message.set("Nao foi possivel cancelar a vaga.");
+        this.message.set("Não foi possível cancelar a vaga.");
         this.loading.set(false);
       },
     });
@@ -293,7 +331,7 @@ export class DashboardComponent implements OnInit {
         this.loadDashboard();
       },
       error: () => {
-        this.message.set("Nao foi possivel cadastrar a vaga.");
+        this.message.set("Não foi possível cadastrar a vaga.");
         this.loading.set(false);
       },
     });
@@ -318,7 +356,7 @@ export class DashboardComponent implements OnInit {
         this.loadDashboard();
       },
       error: () => {
-        this.message.set("Nao foi possivel atualizar a vaga.");
+        this.message.set("Não foi possível atualizar a vaga.");
         this.loading.set(false);
       },
     });
@@ -341,7 +379,7 @@ export class DashboardComponent implements OnInit {
         this.loadDashboard();
       },
       error: () => {
-        this.message.set("Nao foi possivel enviar a candidatura.");
+        this.message.set("Não foi possível enviar a candidatura.");
         this.loading.set(false);
       },
     });
@@ -363,7 +401,7 @@ export class DashboardComponent implements OnInit {
         this.reloadSelectedJobApplications();
       },
       error: () => {
-        this.message.set("Nao foi possivel atualizar o status da candidatura.");
+        this.message.set("Não foi possível atualizar o status da candidatura.");
         this.loading.set(false);
       },
     });
@@ -381,11 +419,33 @@ export class DashboardComponent implements OnInit {
 
     this.api.evaluateApplication(session.token, change.applicationId, change.request).subscribe({
       next: () => {
-        this.message.set("Avaliacao registrada com sucesso.");
+        this.message.set("Avaliação registrada com sucesso.");
         this.loading.set(false);
       },
       error: () => {
-        this.message.set("Nao foi possivel registrar a avaliacao.");
+        this.message.set("Não foi possível registrar a avaliação.");
+        this.loading.set(false);
+      },
+    });
+  }
+
+  openCandidateResume(candidateId: string): void {
+    const session = this.session();
+
+    if (!session) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.message.set("");
+
+    this.api.createCandidateResumeDownloadUrl(session.token, candidateId).subscribe({
+      next: (response) => {
+        window.open(response.downloadUrl, "_blank", "noopener,noreferrer");
+        this.loading.set(false);
+      },
+      error: () => {
+        this.message.set("Não foi possível abrir o currículo do candidato.");
         this.loading.set(false);
       },
     });
@@ -412,11 +472,11 @@ export class DashboardComponent implements OnInit {
 
     this.api.markNotificationAsRead(session.token, notificationId).subscribe({
       next: () => {
-        this.message.set("Notificacao marcada como lida.");
+        this.message.set("Notificação marcada como lida.");
         this.loadNotifications();
       },
       error: () => {
-        this.message.set("Nao foi possivel atualizar a notificacao.");
+        this.message.set("Não foi possível atualizar a notificação.");
         this.loading.set(false);
       },
     });
@@ -434,11 +494,11 @@ export class DashboardComponent implements OnInit {
 
     this.api.markAllNotificationsAsRead(session.token).subscribe({
       next: () => {
-        this.message.set("Notificacoes marcadas como lidas.");
+        this.message.set("Notificações marcadas como lidas.");
         this.loadNotifications();
       },
       error: () => {
-        this.message.set("Nao foi possivel marcar as notificacoes como lidas.");
+        this.message.set("Não foi possível marcar as notificações como lidas.");
         this.loading.set(false);
       },
     });
@@ -465,7 +525,7 @@ export class DashboardComponent implements OnInit {
       },
       error: () => {
         this.adminApplications.set([]);
-        this.message.set("Nao foi possivel carregar as candidaturas da vaga.");
+        this.message.set("Não foi possível carregar as candidaturas da vaga.");
         this.loading.set(false);
       },
     });
@@ -490,7 +550,7 @@ export class DashboardComponent implements OnInit {
         this.loading.set(false);
       },
       error: () => {
-        this.message.set("Nao foi possivel carregar as notificacoes.");
+        this.message.set("Não foi possível carregar as notificações.");
         this.loading.set(false);
       },
     });

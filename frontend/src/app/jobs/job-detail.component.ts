@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { jobStatusLabel } from "../core/display-labels";
 import { JobOpening } from "../core/models";
@@ -33,7 +33,7 @@ import { JobOpening } from "../core/models";
           <form class="apply-box" [formGroup]="form" (ngSubmit)="submit()">
             <textarea formControlName="motivation"></textarea>
             @if (form.controls.motivation.invalid && form.controls.motivation.touched) {
-              <small>Informe uma motivacao entre 10 e 2000 caracteres.</small>
+              <small>Informe uma motivação entre 10 e 2000 caracteres.</small>
             }
             <button [disabled]="form.invalid || loading">Candidatar-se</button>
           </form>
@@ -55,7 +55,7 @@ export class JobDetailComponent {
 
   readonly form = this.formBuilder.nonNullable.group({
     motivation: [
-      "Tenho interesse na vaga e aderencia aos requisitos.",
+      "Tenho interesse na vaga e aderência aos requisitos.",
       [Validators.required, Validators.minLength(10), Validators.maxLength(2000)],
     ],
   });

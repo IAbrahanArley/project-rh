@@ -1,20 +1,27 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { appConfig } from "./app-config";
 import {
   ApplicationStatusRequest,
   AuthResponse,
   CandidateRegisterRequest,
+  CompleteResumeUploadRequest,
   Evaluation,
   EvaluationRequest,
   JobApplication,
   JobOpening,
   JobOpeningRequest,
+  JobSearchFilters,
   JobStatus,
   LoginRequest,
   Notification,
   PageResponse,
+  Resume,
+  ResumeDownloadUrlResponse,
+  ResumeUploadUrlRequest,
+  ResumeUploadUrlResponse,
   UnreadNotificationsResponse,
 } from "./models";
 
@@ -32,11 +39,77 @@ export class RecruitmentApiService {
     return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/candidate/register`, request);
   }
 
-  listJobs(token: string, status: JobStatus | null = "OPEN", page = 0, size = 10): Observable<PageResponse<JobOpening>> {
-    const statusQuery = status ? `status=${status}&` : "";
+  getMyResume(token: string): Observable<Resume | null> {
+    return this.http
+      .get<Resume>(`${this.baseUrl}/api/candidates/me/resume`, {
+        headers: this.authHeaders(token),
+        observe: "response",
+      })
+      .pipe(map((response) => response.body ?? null));
+  }
 
-    return this.http.get<PageResponse<JobOpening>>(`${this.baseUrl}/api/jobs?${statusQuery}page=${page}&size=${size}`, {
+  createResumeUploadUrl(token: string, request: ResumeUploadUrlRequest): Observable<ResumeUploadUrlResponse> {
+    return this.http.post<ResumeUploadUrlResponse>(`${this.baseUrl}/api/candidates/me/resume/upload-url`, request, {
       headers: this.authHeaders(token),
+    });
+  }
+
+  uploadResumeFile(uploadUrl: string, file: File): Observable<string> {
+    return this.http.put(uploadUrl, file, {
+      headers: new HttpHeaders({ "Content-Type": "application/pdf" }),
+      responseType: "text",
+    });
+  }
+
+  completeResumeUpload(token: string, request: CompleteResumeUploadRequest): Observable<Resume> {
+    return this.http.post<Resume>(`${this.baseUrl}/api/candidates/me/resume/complete`, request, {
+      headers: this.authHeaders(token),
+    });
+  }
+
+  createMyResumeDownloadUrl(token: string): Observable<ResumeDownloadUrlResponse> {
+    return this.http.get<ResumeDownloadUrlResponse>(`${this.baseUrl}/api/candidates/me/resume/download-url`, {
+      headers: this.authHeaders(token),
+    });
+  }
+
+  createCandidateResumeDownloadUrl(token: string, candidateId: string): Observable<ResumeDownloadUrlResponse> {
+    return this.http.get<ResumeDownloadUrlResponse>(
+      `${this.baseUrl}/api/candidates/${candidateId}/resume/download-url`,
+      {
+        headers: this.authHeaders(token),
+      },
+    );
+  }
+
+  listJobs(
+    token: string,
+    filters: JobSearchFilters,
+    status: JobStatus | null = "OPEN",
+    page = 0,
+    size = 10,
+  ): Observable<PageResponse<JobOpening>> {
+    let params = new HttpParams().set("page", page).set("size", size);
+
+    if (status) {
+      params = params.set("status", status);
+    }
+
+    if (filters.query.trim()) {
+      params = params.set("q", filters.query.trim());
+    }
+
+    if (filters.department.trim()) {
+      params = params.set("department", filters.department.trim());
+    }
+
+    if (filters.location.trim()) {
+      params = params.set("location", filters.location.trim());
+    }
+
+    return this.http.get<PageResponse<JobOpening>>(`${this.baseUrl}/api/jobs`, {
+      headers: this.authHeaders(token),
+      params,
     });
   }
 

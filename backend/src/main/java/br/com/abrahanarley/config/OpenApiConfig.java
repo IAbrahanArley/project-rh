@@ -1,4 +1,4 @@
-package br.com.abrahanarley.config;
+﻿package br.com.abrahanarley.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 		info = @Info(
 				title = "RH - Recrutamento Interno API",
 				version = "v1",
-				description = "API para recrutamento interno, candidaturas e avaliacoes."))
+				description = "API para recrutamento interno, candidaturas e avaliações."))
 @SecurityScheme(
 		name = "bearerAuth",
 		type = SecuritySchemeType.HTTP,

@@ -1,4 +1,4 @@
-package br.com.abrahanarley.services;
+﻿package br.com.abrahanarley.services;
 
 import br.com.abrahanarley.dto.response.NotificationResponse;
 import br.com.abrahanarley.dto.response.UnreadNotificationsResponse;
@@ -96,7 +96,7 @@ class NotificationServiceTest {
 	@Test
 	void markMineAsReadShouldHideNotificationsFromOtherUsers() {
 		AppUser currentUser = TestFixtures.candidate();
-		AppUser otherUser = TestFixtures.user(TestFixtures.OTHER_USER_ID, "outro", "Outro Usuario",
+		AppUser otherUser = TestFixtures.user(TestFixtures.OTHER_USER_ID, "outro", "Outro Usuário",
 				currentUser.getRole());
 		Notification notification = TestFixtures.notification(TestFixtures.OTHER_NOTIFICATION_ID, otherUser);
 		when(authenticatedUserService.currentUser()).thenReturn(currentUser);

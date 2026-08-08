@@ -1,4 +1,4 @@
-package br.com.abrahanarley.config;
+﻿package br.com.abrahanarley.config;
 
 import br.com.abrahanarley.entities.AppUser;
 import br.com.abrahanarley.entities.JobOpening;
@@ -47,8 +47,8 @@ public class DataSeeder {
 				AppUser admin = userRepository.findByUsername("admin").orElseThrow();
 				jobOpeningRepository.save(new JobOpening(
 						"Desenvolvedor Full Stack Pleno",
-						"Atuar no desenvolvimento de solucoes internas para recrutamento, carreira e mobilidade.",
-						"Experiencia com Java, Spring Boot, APIs REST, Angular e banco relacional.",
+						"Atuar no desenvolvimento de soluções internas para recrutamento, carreira e mobilidade.",
+						"Experiência com Java, Spring Boot, APIs REST, Angular e banco relacional.",
 						"Tecnologia",
 						"Recife - PE",
 						admin));

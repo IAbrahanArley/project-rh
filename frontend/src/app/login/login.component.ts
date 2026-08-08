@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router, RouterLink } from "@angular/router";
 import { finalize } from "rxjs";
@@ -15,15 +15,15 @@ import { RecruitmentApiService } from "../core/recruitment-api.service";
         <div>
           <span class="eyebrow">Recrutamento interno</span>
           <h1>Portal RH</h1>
-          <p>Acesse sua conta para consultar vagas, candidaturas e notificacoes.</p>
+          <p>Acesse sua conta para consultar vagas, candidaturas e notificações.</p>
         </div>
 
         <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
           <label>
-            Usuario
+            Usuário
             <input formControlName="username" autocomplete="username" />
             @if (isInvalid("username")) {
-              <small>Informe o usuario.</small>
+              <small>Informe o usuário.</small>
             }
           </label>
 
@@ -39,7 +39,7 @@ import { RecruitmentApiService } from "../core/recruitment-api.service";
         </form>
 
         <p class="auth-switch">
-          Ainda nao tem conta?
+          Ainda não tem conta?
           <a routerLink="/register">Criar conta de candidato</a>
         </p>
 
@@ -84,7 +84,7 @@ export class LoginComponent {
           void this.router.navigateByUrl("/");
         },
         error: () => {
-          this.errorMessage = "Credenciais invalidas ou API indisponivel.";
+          this.errorMessage = "Credenciais inválidas ou API indisponível.";
         },
       });
   }

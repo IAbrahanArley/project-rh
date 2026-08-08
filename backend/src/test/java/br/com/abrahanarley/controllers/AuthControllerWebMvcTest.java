@@ -1,4 +1,4 @@
-package br.com.abrahanarley.controllers;
+﻿package br.com.abrahanarley.controllers;
 
 import br.com.abrahanarley.dto.request.CandidateRegisterRequest;
 import br.com.abrahanarley.config.SecurityConfig;
@@ -81,7 +81,7 @@ class AuthControllerWebMvcTest {
 		CandidateRegisterRequest request = new CandidateRegisterRequest(
 				"@@",
 				"",
-				"email-invalido",
+				"email-inválido",
 				"curta");
 
 		mockMvc.perform(post("/api/auth/candidate/register")

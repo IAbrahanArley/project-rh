@@ -40,6 +40,39 @@ export interface CandidateRegisterRequest {
   password: string;
 }
 
+export interface ResumeUploadUrlRequest {
+  fileName: string;
+  contentType: "application/pdf";
+  sizeBytes: number;
+}
+
+export interface CompleteResumeUploadRequest {
+  storageKey: string;
+  fileName: string;
+  contentType: "application/pdf";
+  sizeBytes: number;
+}
+
+export interface ResumeUploadUrlResponse {
+  uploadUrl: string;
+  storageKey: string;
+  expiresInSeconds: number;
+  requiredContentType: "application/pdf";
+}
+
+export interface ResumeDownloadUrlResponse {
+  downloadUrl: string;
+  expiresInSeconds: number;
+}
+
+export interface Resume {
+  id: string;
+  fileName: string;
+  contentType: "application/pdf";
+  sizeBytes: number;
+  uploadedAt: string;
+}
+
 export interface JobOpening {
   id: string;
   title: string;
@@ -51,6 +84,12 @@ export interface JobOpening {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface JobSearchFilters {
+  query: string;
+  department: string;
+  location: string;
 }
 
 export interface JobOpeningRequest {

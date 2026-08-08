@@ -1,4 +1,4 @@
-package br.com.abrahanarley.services;
+﻿package br.com.abrahanarley.services;
 
 import br.com.abrahanarley.dto.request.ApplicationStatusRequest;
 import br.com.abrahanarley.dto.request.EvaluationRequest;
@@ -87,7 +87,7 @@ public class JobApplicationService {
 		application.updateStatus(request.status(), request.feedback());
 
 		notificationService.notify(application.getCandidate(), "Status da candidatura atualizado",
-				"Sua candidatura para " + application.getJobOpening().getTitle() + " agora está como "
+				"Sua candidatura para " + application.getJobOpening().getTitle() + " agora estÃ¡ como "
 						+ request.status() + ".");
 
 		return JobApplicationResponse.from(application);
@@ -110,8 +110,8 @@ public class JobApplicationService {
 						request.recommended(),
 						request.comments())));
 
-		notificationService.notify(application.getCandidate(), "Nova avaliacao registrada",
-				"Sua candidatura para " + application.getJobOpening().getTitle() + " recebeu uma avaliacao.");
+		notificationService.notify(application.getCandidate(), "Nova avaliação registrada",
+				"Sua candidatura para " + application.getJobOpening().getTitle() + " recebeu uma avaliação.");
 
 		return EvaluationResponse.from(evaluation);
 	}

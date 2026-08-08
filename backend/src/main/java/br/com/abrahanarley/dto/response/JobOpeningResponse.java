@@ -1,4 +1,4 @@
-package br.com.abrahanarley.dto.response;
+﻿package br.com.abrahanarley.dto.response;
 
 import br.com.abrahanarley.entities.JobOpening;
 import br.com.abrahanarley.enums.JobStatus;
@@ -9,15 +9,15 @@ import java.util.UUID;
 
 @Schema(description = "Dados de uma vaga interna.")
 public record JobOpeningResponse(
-		@Schema(description = "Identificador publico da vaga.", example = "7f36b6d7-2f3d-4bb1-8d83-598a04fb9b4c")
+		@Schema(description = "Identificador público da vaga.", example = "7f36b6d7-2f3d-4bb1-8d83-598a04fb9b4c")
 		UUID id,
 		@Schema(description = "Titulo da vaga.", example = "Analista de Sistemas Pleno")
 		String title,
-		@Schema(description = "Descricao das responsabilidades da vaga.", example = "Atuar no desenvolvimento de produtos internos.")
+		@Schema(description = "Descrição das responsabilidades da vaga.", example = "Atuar no desenvolvimento de produtos internos.")
 		String description,
-		@Schema(description = "Requisitos tecnicos e comportamentais da vaga.", example = "Java, Spring Boot, Angular e comunicacao clara.")
+		@Schema(description = "Requisitos técnicos e comportamentais da vaga.", example = "Java, Spring Boot, Angular e comunicação clara.")
 		String requirements,
-		@Schema(description = "Departamento responsavel pela vaga.", example = "Tecnologia")
+		@Schema(description = "Departamento responsável pela vaga.", example = "Tecnologia")
 		String department,
 		@Schema(description = "Localidade ou modelo de trabalho da vaga.", example = "Recife - PE / Remoto")
 		String location,
@@ -25,9 +25,9 @@ public record JobOpeningResponse(
 		JobStatus status,
 		@Schema(description = "Nome do administrador que cadastrou a vaga.", example = "Administrador RH")
 		String createdBy,
-		@Schema(description = "Data e hora de criacao da vaga.", example = "2026-08-05T10:00:00Z")
+		@Schema(description = "Data e hora de criação da vaga.", example = "2026-08-05T10:00:00Z")
 		OffsetDateTime createdAt,
-		@Schema(description = "Data e hora da ultima atualizacao da vaga.", example = "2026-08-05T10:00:00Z")
+		@Schema(description = "Data e hora da última atualização da vaga.", example = "2026-08-05T10:00:00Z")
 		OffsetDateTime updatedAt) {
 
 	public static JobOpeningResponse from(JobOpening job) {

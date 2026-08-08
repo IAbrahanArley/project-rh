@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+﻿import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { jobStatusLabel } from "../core/display-labels";
 import { JobOpening, JobOpeningRequest, JobStatus } from "../core/models";
@@ -20,7 +20,7 @@ export type JobFormMode = "create" | "edit";
           Titulo
           <input formControlName="title" placeholder="Analista Java Pleno" />
           @if (isInvalid("title")) {
-            <small>Informe um titulo com ate 140 caracteres.</small>
+            <small>Informe um título com até 140 caracteres.</small>
           }
         </label>
 
@@ -41,10 +41,10 @@ export type JobFormMode = "create" | "edit";
         </label>
 
         <label>
-          Descricao
+          Descrição
           <textarea formControlName="description" placeholder="Responsabilidades da vaga"></textarea>
           @if (isInvalid("description")) {
-            <small>Informe uma descricao.</small>
+            <small>Informe uma descrição.</small>
           }
         </label>
 
@@ -68,9 +68,9 @@ export type JobFormMode = "create" | "edit";
         }
 
         <div class="form-actions">
-          <button [disabled]="form.invalid || loading">{{ mode === "edit" ? "Salvar alteracoes" : "Cadastrar vaga" }}</button>
+          <button [disabled]="form.invalid || loading">{{ mode === "edit" ? "Salvar alterações" : "Cadastrar vaga" }}</button>
           @if (mode === "edit") {
-            <button class="ghost" type="button" [disabled]="loading" (click)="cancelEdit.emit()">Cancelar edicao</button>
+            <button class="ghost" type="button" [disabled]="loading" (click)="cancelEdit.emit()">Cancelar edição</button>
           }
         </div>
       </form>

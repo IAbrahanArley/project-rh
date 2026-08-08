@@ -1,4 +1,4 @@
-package br.com.abrahanarley.controllers;
+﻿package br.com.abrahanarley.controllers;
 
 import br.com.abrahanarley.config.SecurityConfig;
 import br.com.abrahanarley.dto.request.ApplicationStatusRequest;
@@ -64,7 +64,7 @@ class JobApplicationControllerWebMvcTest {
 
 	@Test
 	@WithMockUser(username = "colaborador", roles = "CANDIDATE")
-	void listMineShouldReturnPaginatedApplicationsForCandidate() throws Exception {
+	void listMineShouldReturnPáginatedApplicationsForCandidate() throws Exception {
 		when(jobApplicationService.listMine(any())).thenReturn(new PageImpl<>(List.of(applicationResponse()),
 				PageRequest.of(0, 10), 1));
 
@@ -117,14 +117,14 @@ class JobApplicationControllerWebMvcTest {
 	@WithMockUser(username = "admin", roles = "ADMIN")
 	void evaluateShouldReturnEvaluationForAdmin() throws Exception {
 		UUID applicationId = UUID.fromString("00000000-0000-0000-0000-000000000020");
-		EvaluationRequest request = new EvaluationRequest(5, true, "Excelente aderencia.");
+		EvaluationRequest request = new EvaluationRequest(5, true, "Excelente aderência.");
 		when(jobApplicationService.evaluate(eq(applicationId), any())).thenReturn(new EvaluationResponse(
 				UUID.fromString("00000000-0000-0000-0000-000000000030"),
 				applicationId,
 				"Administrador RH",
 				5,
 				true,
-				"Excelente aderencia.",
+				"Excelente aderência.",
 				OffsetDateTime.parse("2026-08-05T10:00:00Z"),
 				OffsetDateTime.parse("2026-08-05T10:00:00Z")));
 
@@ -135,7 +135,7 @@ class JobApplicationControllerWebMvcTest {
 				.andExpect(jsonPath("$.applicationId").value(applicationId.toString()))
 				.andExpect(jsonPath("$.score").value(5))
 				.andExpect(jsonPath("$.recommended").value(true))
-				.andExpect(jsonPath("$.comments").value("Excelente aderencia."));
+				.andExpect(jsonPath("$.comments").value("Excelente aderência."));
 	}
 
 	@Test

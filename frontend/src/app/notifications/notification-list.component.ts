@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { humanizeBackendMessage } from "../core/display-labels";
 import { Notification } from "../core/models";
 
@@ -11,8 +11,8 @@ export type NotificationReadFilter = boolean | null;
     <div class="panel notifications-panel">
       <div class="panel-header notification-header">
         <div>
-          <h2>Notificacoes</h2>
-          <span>{{ unreadCount }} nao lidas</span>
+          <h2>Notificações</h2>
+          <span>{{ unreadCount }} não lidas</span>
         </div>
 
         <button class="ghost" type="button" [disabled]="loading || unreadCount === 0" (click)="markAllAsRead.emit()">
@@ -20,7 +20,7 @@ export type NotificationReadFilter = boolean | null;
         </button>
       </div>
 
-      <div class="segmented-control notification-filter" aria-label="Filtro de notificacoes">
+      <div class="segmented-control notification-filter" aria-label="Filtro de notificações">
         @for (option of filterOptions; track option.label) {
           <button
             class="ghost"
@@ -38,7 +38,7 @@ export type NotificationReadFilter = boolean | null;
           <article class="compact-card notification-card" [class.unread]="!notification.read">
             <div class="notification-card-header">
               <strong>{{ notification.subject }}</strong>
-              <span>{{ notification.read ? "Lida" : "Nao lida" }}</span>
+              <span>{{ notification.read ? "Lida" : "Não lida" }}</span>
             </div>
 
             <p>{{ notificationMessage(notification.message) }}</p>
@@ -50,7 +50,7 @@ export type NotificationReadFilter = boolean | null;
             }
           </article>
         } @empty {
-          <p>Nenhuma notificacao encontrada.</p>
+          <p>Nenhuma notificação encontrada.</p>
         }
       </div>
     </div>
@@ -67,7 +67,7 @@ export class NotificationListComponent {
 
   readonly filterOptions: Array<{ label: string; value: NotificationReadFilter }> = [
     { label: "Todas", value: null },
-    { label: "Nao lidas", value: false },
+    { label: "Não lidas", value: false },
     { label: "Lidas", value: true },
   ];
 

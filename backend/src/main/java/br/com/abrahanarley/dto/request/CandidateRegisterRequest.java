@@ -1,4 +1,4 @@
-package br.com.abrahanarley.dto.request;
+﻿package br.com.abrahanarley.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-@Schema(description = "Dados para cadastro publico de candidato.")
+@Schema(description = "Dados para cadastro público de candidato.")
 public record CandidateRegisterRequest(
-		@Schema(description = "Nome de usuario para login.", example = "maria.silva")
+		@Schema(description = "Nome de usuário para login.", example = "maria.silva")
 		@NotBlank
 		@Size(min = 3, max = 80)
 		@Pattern(regexp = "^[A-Za-z0-9._-]+$", message = "must contain only letters, numbers, dots, underscores or hyphens")

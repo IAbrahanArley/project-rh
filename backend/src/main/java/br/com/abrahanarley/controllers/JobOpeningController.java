@@ -1,5 +1,6 @@
 package br.com.abrahanarley.controllers;
 
+import br.com.abrahanarley.dto.request.JobOpeningFilter;
 import br.com.abrahanarley.dto.request.JobApplicationRequest;
 import br.com.abrahanarley.dto.request.JobOpeningRequest;
 import br.com.abrahanarley.dto.response.JobApplicationResponse;
@@ -38,10 +39,14 @@ public class JobOpeningController implements JobOpeningApi {
 	@Override
 	public PageResponse<JobOpeningResponse> list(
 			@RequestParam(required = false) JobStatus status,
+			@RequestParam(required = false, name = "q") String query,
+			@RequestParam(required = false) String department,
+			@RequestParam(required = false) String location,
 			@PageableDefault(size = 10)
 			@SortDefault(sort = "createdAt", direction = org.springframework.data.domain.Sort.Direction.DESC)
 			Pageable pageable) {
-		return PageResponse.from(jobOpeningService.list(status, pageable));
+		return PageResponse.from(jobOpeningService.list(new JobOpeningFilter(status, query, department, location),
+				pageable));
 	}
 
 	@Override

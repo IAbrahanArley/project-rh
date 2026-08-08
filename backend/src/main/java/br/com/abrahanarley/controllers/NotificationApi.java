@@ -1,4 +1,4 @@
-package br.com.abrahanarley.controllers;
+﻿package br.com.abrahanarley.controllers;
 
 import br.com.abrahanarley.dto.response.NotificationResponse;
 import br.com.abrahanarley.dto.response.PageResponse;
@@ -22,24 +22,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
-@Tag(name = "Notificacoes", description = "Endpoints para consulta e leitura das notificacoes do usuario autenticado.")
+@Tag(name = "Notificações", description = "Endpoints para consulta e leitura das notificações do usuário autenticado.")
 public interface NotificationApi {
 
 	@Operation(
-			summary = "Listar minhas notificacoes",
-			description = "Retorna uma pagina de notificacoes do usuario autenticado, com filtro opcional por leitura.",
+			summary = "Listar minhas notificações",
+			description = "Retorna uma página de notificações do usuário autenticado, com filtro opcional por leitura.",
 			security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
-					description = "Notificacoes retornadas com sucesso.",
+					description = "Notificações retornadas com sucesso.",
 					content = @Content(schema = @Schema(implementation = PageResponse.class))),
-			@ApiResponse(responseCode = "400", description = "Parametro invalido.", content = @Content),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content)
+			@ApiResponse(responseCode = "400", description = "Parametro inválido.", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content)
 	})
 	@GetMapping("/me")
 	PageResponse<NotificationResponse> listMine(
-			@Parameter(description = "Filtra notificacoes por status de leitura.", example = "false")
+			@Parameter(description = "Filtra notificações por status de leitura.", example = "false")
 			@RequestParam(required = false) Boolean read,
 			@ParameterObject
 			@PageableDefault(size = 10)
@@ -47,48 +47,48 @@ public interface NotificationApi {
 			Pageable pageable);
 
 	@Operation(
-			summary = "Contar notificacoes nao lidas",
-			description = "Retorna a quantidade de notificacoes ainda nao lidas do usuario autenticado.",
+			summary = "Contar notificações não lidas",
+			description = "Retorna a quantidade de notificações ainda não lidas do usuário autenticado.",
 			security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
 					description = "Contagem retornada com sucesso.",
 					content = @Content(schema = @Schema(implementation = UnreadNotificationsResponse.class))),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content)
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content)
 	})
 	@GetMapping("/me/unread-count")
 	UnreadNotificationsResponse countMineUnread();
 
 	@Operation(
-			summary = "Marcar notificacao como lida",
-			description = "Marca uma notificacao do usuario autenticado como lida.",
+			summary = "Marcar notificação como lida",
+			description = "Marca uma notificação do usuário autenticado como lida.",
 			security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
-					description = "Notificacao marcada como lida.",
+					description = "Notificação marcada como lida.",
 					content = @Content(schema = @Schema(implementation = NotificationResponse.class))),
-			@ApiResponse(responseCode = "400", description = "ID invalido.", content = @Content),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content),
-			@ApiResponse(responseCode = "404", description = "Notificacao nao encontrada.", content = @Content)
+			@ApiResponse(responseCode = "400", description = "ID inválido.", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content),
+			@ApiResponse(responseCode = "404", description = "Notificação não encontrada.", content = @Content)
 	})
 	@PatchMapping("/{id}/read")
 	NotificationResponse markAsRead(
-			@Parameter(description = "Identificador publico da notificacao.",
+			@Parameter(description = "Identificador público da notificação.",
 					example = "1f8cc6c7-6dc4-4b45-97aa-5528ac1918ea")
 			@PathVariable UUID id);
 
 	@Operation(
 			summary = "Marcar todas como lidas",
-			description = "Marca todas as notificacoes nao lidas do usuario autenticado como lidas.",
+			description = "Marca todas as notificações não lidas do usuário autenticado como lidas.",
 			security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
-					description = "Notificacoes marcadas como lidas.",
+					description = "Notificações marcadas como lidas.",
 					content = @Content(schema = @Schema(implementation = UnreadNotificationsResponse.class))),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content)
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content)
 	})
 	@PatchMapping("/read-all")
 	UnreadNotificationsResponse markAllAsRead();

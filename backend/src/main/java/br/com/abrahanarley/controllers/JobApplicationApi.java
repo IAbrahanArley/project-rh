@@ -1,4 +1,4 @@
-package br.com.abrahanarley.controllers;
+﻿package br.com.abrahanarley.controllers;
 
 import br.com.abrahanarley.dto.request.ApplicationStatusRequest;
 import br.com.abrahanarley.dto.request.EvaluationRequest;
@@ -26,21 +26,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
-@Tag(name = "Candidaturas", description = "Endpoints para acompanhamento, atualizacao e avaliacao de candidaturas.")
+@Tag(name = "Candidaturas", description = "Endpoints para acompanhamento, atualização e avaliação de candidaturas.")
 public interface JobApplicationApi {
 
 	@Operation(
 			summary = "Listar minhas candidaturas",
-			description = "Retorna uma pagina com as candidaturas do colaborador autenticado.",
+			description = "Retorna uma página com as candidaturas do colaborador autenticado.",
 			security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
 					description = "Candidaturas retornadas com sucesso.",
 					content = @Content(schema = @Schema(implementation = PageResponse.class))),
-			@ApiResponse(responseCode = "400", description = "Parametro invalido.", content = @Content),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content),
-			@ApiResponse(responseCode = "403", description = "Usuario sem permissao para consultar candidaturas.",
+			@ApiResponse(responseCode = "400", description = "Parametro inválido.", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content),
+			@ApiResponse(responseCode = "403", description = "Usuário sem permissão para consultar candidaturas.",
 					content = @Content)
 	})
 	@GetMapping("/me")
@@ -59,37 +59,37 @@ public interface JobApplicationApi {
 					responseCode = "200",
 					description = "Status atualizado com sucesso.",
 					content = @Content(schema = @Schema(implementation = JobApplicationResponse.class))),
-			@ApiResponse(responseCode = "400", description = "ID ou payload invalido.", content = @Content),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content),
-			@ApiResponse(responseCode = "403", description = "Usuario sem permissao para atualizar status.",
+			@ApiResponse(responseCode = "400", description = "ID ou payload inválido.", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content),
+			@ApiResponse(responseCode = "403", description = "Usuário sem permissão para atualizar status.",
 					content = @Content),
-			@ApiResponse(responseCode = "404", description = "Candidatura nao encontrada.", content = @Content)
+			@ApiResponse(responseCode = "404", description = "Candidatura não encontrada.", content = @Content)
 	})
 	@PatchMapping("/{id}/status")
 	JobApplicationResponse updateStatus(
-			@Parameter(description = "Identificador publico da candidatura.",
+			@Parameter(description = "Identificador público da candidatura.",
 					example = "f9a0b59d-4302-4f0f-bb79-4f130f279099")
 			@PathVariable UUID id,
 			@RequestBody @Valid ApplicationStatusRequest request);
 
 	@Operation(
 			summary = "Avaliar candidatura",
-			description = "Registra ou atualiza a avaliacao de uma candidatura. Requer perfil de administrador.",
+			description = "Registra ou atualiza a avaliação de uma candidatura. Requer perfil de administrador.",
 			security = @SecurityRequirement(name = "bearerAuth"))
 	@ApiResponses({
 			@ApiResponse(
 					responseCode = "200",
-					description = "Avaliacao registrada com sucesso.",
+					description = "Avaliação registrada com sucesso.",
 					content = @Content(schema = @Schema(implementation = EvaluationResponse.class))),
-			@ApiResponse(responseCode = "400", description = "ID ou payload invalido.", content = @Content),
-			@ApiResponse(responseCode = "401", description = "Token ausente, invalido ou expirado.", content = @Content),
-			@ApiResponse(responseCode = "403", description = "Usuario sem permissao para avaliar candidaturas.",
+			@ApiResponse(responseCode = "400", description = "ID ou payload inválido.", content = @Content),
+			@ApiResponse(responseCode = "401", description = "Token ausente, inválido ou expirado.", content = @Content),
+			@ApiResponse(responseCode = "403", description = "Usuário sem permissão para avaliar candidaturas.",
 					content = @Content),
-			@ApiResponse(responseCode = "404", description = "Candidatura nao encontrada.", content = @Content)
+			@ApiResponse(responseCode = "404", description = "Candidatura não encontrada.", content = @Content)
 	})
 	@PostMapping("/{id}/evaluation")
 	EvaluationResponse evaluate(
-			@Parameter(description = "Identificador publico da candidatura.",
+			@Parameter(description = "Identificador público da candidatura.",
 					example = "f9a0b59d-4302-4f0f-bb79-4f130f279099")
 			@PathVariable UUID id,
 			@RequestBody @Valid EvaluationRequest request);

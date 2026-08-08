@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from "@angular/forms";
 import { Router, RouterLink } from "@angular/router";
 import { finalize } from "rxjs";
@@ -33,12 +33,12 @@ type RegisterControlName = "username" | "fullName" | "email" | "password" | "con
             E-mail
             <input formControlName="email" type="email" autocomplete="email" maxlength="160" />
             @if (isInvalid("email")) {
-              <small>Informe um e-mail valido.</small>
+              <small>Informe um e-mail válido.</small>
             }
           </label>
 
           <label>
-            Usuario
+            Usuário
             <input formControlName="username" autocomplete="username" maxlength="80" />
             @if (isInvalid("username")) {
               <small>Use 3 a 80 caracteres: letras, numeros, ponto, underline ou hifen.</small>
@@ -69,7 +69,7 @@ type RegisterControlName = "username" | "fullName" | "email" | "password" | "con
         }
 
         <p class="auth-switch">
-          Ja tem conta?
+          Já tem conta?
           <a routerLink="/login">Entrar no portal</a>
         </p>
       </section>
@@ -132,7 +132,7 @@ export class RegisterComponent {
           void this.router.navigateByUrl("/");
         },
         error: () => {
-          this.errorMessage = "Nao foi possivel criar a conta. Verifique os dados ou tente outro usuario/e-mail.";
+          this.errorMessage = "Não foi possível criar a conta. Verifique os dados ou tente outro usuário/e-mail.";
         },
       });
   }
