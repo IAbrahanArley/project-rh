@@ -84,6 +84,8 @@ jobs:
           set -euo pipefail
 
           cd "$HOME/rh"
+          sudo chown -R "$USER:$USER" "$HOME/rh"
+          rm -rf backend frontend/dist/rh-frontend ops/ec2 docker-compose.aws.yml
           tar -xzf rh-aws-deploy.tgz
 
           test -f .env.aws
