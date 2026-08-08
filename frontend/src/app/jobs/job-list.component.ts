@@ -1,0 +1,76 @@
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { jobStatusLabel } from "../core/display-labels";
+import { JobOpening, JobStatus } from "../core/models";
+
+@Component({
+  selector: "app-job-list",
+  standalone: true,
+  template: `
+    <div class="panel jobs-panel">
+      <div class="panel-header">
+        <h2>Vagas disponiveis</h2>
+        @if (loading) {
+          <span>Atualizando...</span>
+        }
+      </div>
+
+      @if (canFilterStatus) {
+        <div class="segmented-control" aria-label="Filtro de status da vaga">
+          <button
+            class="ghost"
+            type="button"
+            [class.active]="selectedStatus === null"
+            (click)="statusChange.emit(null)"
+          >
+            Todas
+          </button>
+
+          @for (option of statusOptions; track option.value) {
+            <button
+              class="ghost"
+              type="button"
+              [class.active]="selectedStatus === option.value"
+              (click)="statusChange.emit(option.value)"
+            >
+              {{ option.label }}
+            </button>
+          }
+        </div>
+      }
+
+      <div class="job-list">
+        @for (job of jobs; track job.id) {
+          <button
+            type="button"
+            class="job-item"
+            [class.active]="job.id === selectedJobId"
+            (click)="selectJob.emit(job.id)"
+          >
+            <strong>{{ job.title }}</strong>
+            <span>{{ job.department }} - {{ job.location }}</span>
+            <span class="status mini-status">{{ jobStatusLabel(job.status) }}</span>
+          </button>
+        } @empty {
+          <p>Nenhuma vaga encontrada.</p>
+        }
+      </div>
+    </div>
+  `,
+})
+export class JobListComponent {
+  @Input({ required: true }) jobs: JobOpening[] = [];
+  @Input() selectedJobId: string | null = null;
+  @Input() selectedStatus: JobStatus | null = "OPEN";
+  @Input() canFilterStatus = false;
+  @Input() loading = false;
+  @Output() selectJob = new EventEmitter<string>();
+  @Output() statusChange = new EventEmitter<JobStatus | null>();
+
+  readonly statusOptions: Array<{ label: string; value: JobStatus }> = [
+    { label: "Abertas", value: "OPEN" },
+    { label: "Fechadas", value: "CLOSED" },
+    { label: "Canceladas", value: "CANCELLED" },
+  ];
+
+  protected readonly jobStatusLabel = jobStatusLabel;
+}
