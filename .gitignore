@@ -1,4 +1,8 @@
 HELP.md
+.env
+.env.aws
+!.env.example
+!.env.aws.example
 target/
 backend/target/
 .mvn/wrapper/maven-wrapper.jar

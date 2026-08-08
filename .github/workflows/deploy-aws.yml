@@ -1,0 +1,127 @@
+name: Deploy AWS
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-aws
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Run backend tests
+        working-directory: backend
+        run: mvn -B test
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend for AWS
+        working-directory: frontend
+        run: npm run build:aws
+
+      - name: Create deploy package
+        run: |
+          set -euo pipefail
+          rm -rf .deploy-package rh-aws-deploy.tgz
+          mkdir -p .deploy-package/backend .deploy-package/frontend/dist/rh-frontend .deploy-package/ops
+
+          cp docker-compose.aws.yml .deploy-package/
+          cp -R ops/ec2 .deploy-package/ops/
+
+          cp backend/pom.xml backend/Dockerfile .deploy-package/backend/
+          cp -R backend/src .deploy-package/backend/
+
+          cp -R frontend/dist/rh-frontend/browser .deploy-package/frontend/dist/rh-frontend/
+
+          tar -C .deploy-package -czf rh-aws-deploy.tgz .
+
+      - name: Configure SSH
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.AWS_EC2_SSH_KEY }}" > ~/.ssh/aws_ec2_key
+          chmod 600 ~/.ssh/aws_ec2_key
+          ssh-keyscan -H "${{ secrets.AWS_EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Upload package to EC2
+        run: |
+          set -euo pipefail
+          scp -i ~/.ssh/aws_ec2_key rh-aws-deploy.tgz \
+            "${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }}:/home/${{ secrets.AWS_EC2_USER }}/rh/rh-aws-deploy.tgz"
+
+      - name: Restart containers on EC2
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/aws_ec2_key "${{ secrets.AWS_EC2_USER }}@${{ secrets.AWS_EC2_HOST }}" 'bash -s' <<'REMOTE'
+          set -euo pipefail
+
+          cd "$HOME/rh"
+          tar -xzf rh-aws-deploy.tgz
+
+          test -f .env.aws
+          docker network inspect rh-net >/dev/null 2>&1 || docker network create rh-net
+
+          docker build -t rh-api ./backend
+
+          docker rm -f rh-api rh-api-proxy >/dev/null 2>&1 || true
+
+          set -a
+          . ./.env.aws
+          set +a
+
+          docker run -d \
+            --name rh-api \
+            --network rh-net \
+            --network-alias api \
+            --restart unless-stopped \
+            --env-file .env.aws \
+            -e DB_URL="jdbc:postgresql://postgres:5432/${POSTGRES_DB:-rh}" \
+            -e DB_USERNAME="${POSTGRES_USER:-rh_app}" \
+            -e DB_PASSWORD="$POSTGRES_PASSWORD" \
+            rh-api
+
+          docker run -d \
+            --name rh-api-proxy \
+            --network rh-net \
+            --restart unless-stopped \
+            -p 80:80 \
+            -v "$HOME/rh/ops/ec2/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
+            -v "$HOME/rh/frontend/dist/rh-frontend/browser:/usr/share/nginx/html:ro" \
+            nginx:1.27-alpine
+
+          docker ps
+          REMOTE
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          curl --fail --max-time 30 "http://${{ secrets.AWS_EC2_HOST }}/"
+          curl --fail --max-time 30 "http://${{ secrets.AWS_EC2_HOST }}/assets/runtime-config.js"
