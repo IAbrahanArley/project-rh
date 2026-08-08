@@ -84,7 +84,7 @@ export class CandidateHomeComponent implements OnInit {
     this.message.set("");
 
     forkJoin({
-      jobs: this.api.listJobs(session.token, { query: "", department: "", location: "" }, "OPEN", 0, 1),
+      jobs: this.api.listJobs({ query: "", department: "", location: "" }, "OPEN", 0, 1),
       applications: this.api.listMyApplications(session.token).pipe(catchError(() => of(this.emptyPage<JobApplication>()))),
       notifications: this.api.listNotifications(session.token, this.notificationReadFilter()),
       unread: this.api.countUnreadNotifications(session.token),

@@ -83,7 +83,6 @@ export class RecruitmentApiService {
   }
 
   listJobs(
-    token: string,
     filters: JobSearchFilters,
     status: JobStatus | null = "OPEN",
     page = 0,
@@ -108,7 +107,6 @@ export class RecruitmentApiService {
     }
 
     return this.http.get<PageResponse<JobOpening>>(`${this.baseUrl}/api/jobs`, {
-      headers: this.authHeaders(token),
       params,
     });
   }

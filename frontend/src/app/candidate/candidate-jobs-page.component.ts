@@ -92,7 +92,7 @@ export class CandidateJobsPageComponent implements OnInit {
     this.loading.set(true);
     this.message.set("");
 
-    this.api.listJobs(session.token, this.filters(), "OPEN", this.page()).subscribe({
+    this.api.listJobs(this.filters(), "OPEN", this.page()).subscribe({
       next: (jobs) => {
         const currentSelectedId = this.selectedJobId();
         const selectedJobId = jobs.content.some((job) => job.id === currentSelectedId)

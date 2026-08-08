@@ -61,8 +61,39 @@ class JobOpeningControllerWebMvcTest {
 	private UserDetailsService userDetailsService;
 
 	@Test
-	void listShouldReturnUnauthorizedWithoutAuthentication() throws Exception {
+	void listShouldReturnJobsWithoutAuthentication() throws Exception {
+		when(jobOpeningService.list(eq(new JobOpeningFilter(null, null, null, null)), any()))
+				.thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 10), 0));
+
 		mockMvc.perform(get("/api/jobs"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.totalElements").value(0));
+	}
+
+	@Test
+	void findByIdShouldReturnJobWithoutAuthentication() throws Exception {
+		UUID jobId = UUID.fromString("00000000-0000-0000-0000-000000000010");
+		when(jobOpeningService.findById(jobId)).thenReturn(new JobOpeningResponse(
+				jobId,
+				"Analista Java",
+				"DescriÃ§Ã£o da vaga",
+				"Spring Boot",
+				"Tecnologia",
+				"Remoto",
+				JobStatus.OPEN,
+				"Administrador RH",
+				OffsetDateTime.parse("2026-08-05T10:00:00Z"),
+				OffsetDateTime.parse("2026-08-05T10:00:00Z")));
+
+		mockMvc.perform(get("/api/jobs/{id}", jobId))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id").value(jobId.toString()))
+				.andExpect(jsonPath("$.status").value("OPEN"));
+	}
+
+	@Test
+	void listApplicationsShouldReturnUnauthorizedWithoutAuthentication() throws Exception {
+		mockMvc.perform(get("/api/jobs/{id}/applications", UUID.fromString("00000000-0000-0000-0000-000000000010")))
 				.andExpect(status().isUnauthorized());
 	}
 

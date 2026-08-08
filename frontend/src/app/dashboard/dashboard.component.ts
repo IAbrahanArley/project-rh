@@ -173,7 +173,6 @@ export class DashboardComponent implements OnInit {
 
     forkJoin({
       jobs: this.api.listJobs(
-        session.token,
         this.jobSearchFilters(),
         isAdmin ? this.jobStatusFilter() : "OPEN",
         this.jobsPage(),
