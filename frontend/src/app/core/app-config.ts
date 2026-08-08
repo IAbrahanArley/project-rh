@@ -11,5 +11,5 @@ declare global {
 }
 
 export const appConfig = {
-  apiBaseUrl: window.RH_RUNTIME_CONFIG?.apiBaseUrl || environment.apiBaseUrl,
+  apiBaseUrl: window.RH_RUNTIME_CONFIG?.apiBaseUrl ?? environment.apiBaseUrl,
 };
