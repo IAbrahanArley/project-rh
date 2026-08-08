@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { finalize } from "rxjs";
 import { AuthService } from "../core/auth.service";
 import { RecruitmentApiService } from "../core/recruitment-api.service";
@@ -8,14 +8,14 @@ import { RecruitmentApiService } from "../core/recruitment-api.service";
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   template: `
     <main class="login-shell">
       <section class="login-panel">
         <div>
           <span class="eyebrow">Recrutamento interno</span>
           <h1>Portal RH</h1>
-          <p>Entre com as credenciais demo para acessar vagas, candidaturas e notificacoes.</p>
+          <p>Acesse sua conta para consultar vagas, candidaturas e notificacoes.</p>
         </div>
 
         <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
@@ -37,6 +37,11 @@ import { RecruitmentApiService } from "../core/recruitment-api.service";
 
           <button [disabled]="form.invalid || loading">{{ loading ? "Entrando..." : "Entrar" }}</button>
         </form>
+
+        <p class="auth-switch">
+          Ainda nao tem conta?
+          <a routerLink="/register">Criar conta de candidato</a>
+        </p>
 
         @if (errorMessage) {
           <p class="alert">{{ errorMessage }}</p>

@@ -1,5 +1,6 @@
 package br.com.abrahanarley.controllers;
 
+import br.com.abrahanarley.dto.request.CandidateRegisterRequest;
 import br.com.abrahanarley.dto.request.LoginRequest;
 import br.com.abrahanarley.dto.response.AuthResponse;
 import br.com.abrahanarley.dto.response.AuthenticatedUserResponse;
@@ -17,6 +18,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Autenticacao", description = "Endpoints para login JWT e consulta do usuario autenticado.")
 public interface AuthApi {
+
+	@Operation(
+			summary = "Cadastrar candidato",
+			description = "Cria uma conta publica de candidato e retorna um token JWT para acesso ao portal.")
+	@ApiResponses({
+			@ApiResponse(
+					responseCode = "200",
+					description = "Candidato cadastrado e autenticado com sucesso.",
+					content = @Content(schema = @Schema(implementation = AuthResponse.class))),
+			@ApiResponse(responseCode = "400", description = "Payload invalido ou dados ja cadastrados.", content = @Content)
+	})
+	@PostMapping("/candidate/register")
+	AuthResponse registerCandidate(@RequestBody @Valid CandidateRegisterRequest request);
 
 	@Operation(
 			summary = "Autenticar usuario",

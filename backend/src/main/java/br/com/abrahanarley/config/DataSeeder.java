@@ -6,6 +6,7 @@ import br.com.abrahanarley.enums.Role;
 import br.com.abrahanarley.repositories.JobOpeningRepository;
 import br.com.abrahanarley.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 public class DataSeeder {
 
 	@Bean
+	@ConditionalOnProperty(name = "app.seed-demo-data", havingValue = "true", matchIfMissing = true)
 	CommandLineRunner seedData(UserRepository userRepository, JobOpeningRepository jobOpeningRepository,
 			PasswordEncoder passwordEncoder) {
 		return args -> {
@@ -34,7 +36,7 @@ public class DataSeeder {
 				userRepository.save(new AppUser(
 						"colaborador",
 						passwordEncoder.encode("user123"),
-						"Colaborador Demo",
+						"Colaborador Interno",
 						"colaborador@empresa.com",
 						"Tecnologia",
 						LocalDate.of(2022, 4, 5),

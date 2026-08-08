@@ -64,6 +64,10 @@ button:disabled {
   width: 100%;
 }
 
+.register-panel {
+  max-width: 520px;
+}
+
 .login-panel h1,
 .topbar h1 {
   font-size: 32px;
@@ -94,6 +98,27 @@ button:disabled {
   gap: 14px;
 }
 
+.register-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.register-form label:first-child,
+.register-form button {
+  grid-column: 1 / -1;
+}
+
+.auth-switch {
+  color: #55645f;
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #126a5b;
+  font-weight: 800;
+}
+
 .job-form {
   display: grid;
   gap: 12px;
@@ -116,6 +141,12 @@ textarea {
   outline: none;
   padding: 12px;
   width: 100%;
+}
+
+small {
+  color: #9d2f2f;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 textarea {
@@ -251,6 +282,24 @@ textarea {
 .stack {
   display: grid;
   gap: 10px;
+}
+
+.pagination {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  margin-top: 14px;
+}
+
+.pagination span {
+  color: #66736f;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.pagination button {
+  min-height: 36px;
 }
 
 .job-item {
@@ -503,6 +552,10 @@ app-admin-application-panel,
   }
 
   .notification-filter {
+    grid-template-columns: 1fr;
+  }
+
+  .register-form {
     grid-template-columns: 1fr;
   }
 }

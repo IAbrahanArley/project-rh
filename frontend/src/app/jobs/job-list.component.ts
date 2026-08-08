@@ -54,6 +54,18 @@ import { JobOpening, JobStatus } from "../core/models";
           <p>Nenhuma vaga encontrada.</p>
         }
       </div>
+
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button class="ghost" type="button" [disabled]="loading || first" (click)="pageChange.emit(page - 1)">
+            Anterior
+          </button>
+          <span>Pagina {{ page + 1 }} de {{ totalPages }}</span>
+          <button class="ghost" type="button" [disabled]="loading || last" (click)="pageChange.emit(page + 1)">
+            Proxima
+          </button>
+        </div>
+      }
     </div>
   `,
 })
@@ -61,10 +73,15 @@ export class JobListComponent {
   @Input({ required: true }) jobs: JobOpening[] = [];
   @Input() selectedJobId: string | null = null;
   @Input() selectedStatus: JobStatus | null = "OPEN";
+  @Input() page = 0;
+  @Input() totalPages = 0;
+  @Input() first = true;
+  @Input() last = true;
   @Input() canFilterStatus = false;
   @Input() loading = false;
   @Output() selectJob = new EventEmitter<string>();
   @Output() statusChange = new EventEmitter<JobStatus | null>();
+  @Output() pageChange = new EventEmitter<number>();
 
   readonly statusOptions: Array<{ label: string; value: JobStatus }> = [
     { label: "Abertas", value: "OPEN" },

@@ -54,7 +54,7 @@ Frontend dev: http://localhost:5173
 API:          http://localhost:8080
 ```
 
-## Usuarios Demo
+## Usuarios de Desenvolvimento
 
 Administrador:
 
@@ -81,6 +81,7 @@ DB_PASSWORD=postgres
 JWT_SECRET=change-this-development-secret-with-at-least-32-chars
 JWT_EXPIRATION_MINUTES=120
 CORS_ALLOWED_ORIGINS=http://localhost:4200,http://localhost:5173
+SEED_DEMO_DATA=true
 ```
 
 Frontend em Docker:
@@ -95,6 +96,7 @@ Autenticacao:
 
 ```http
 POST /api/auth/login
+POST /api/auth/candidate/register
 GET /api/auth/me
 ```
 
@@ -127,3 +129,13 @@ PATCH /api/notifications/{id}/read
 PATCH /api/notifications/read-all
 ```
 
+## CI
+
+O projeto possui um workflow de CI em `.github/workflows/ci.yml` que roda em push e pull request para a branch `main`.
+
+Ele valida:
+
+- testes do backend
+- build do frontend
+- build das imagens Docker
+- arquivo `docker-compose.yml`

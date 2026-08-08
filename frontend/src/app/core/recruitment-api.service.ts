@@ -5,6 +5,7 @@ import { appConfig } from "./app-config";
 import {
   ApplicationStatusRequest,
   AuthResponse,
+  CandidateRegisterRequest,
   Evaluation,
   EvaluationRequest,
   JobApplication,
@@ -27,10 +28,14 @@ export class RecruitmentApiService {
     return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/login`, request);
   }
 
-  listJobs(token: string, status: JobStatus | null = "OPEN"): Observable<PageResponse<JobOpening>> {
+  registerCandidate(request: CandidateRegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/api/auth/candidate/register`, request);
+  }
+
+  listJobs(token: string, status: JobStatus | null = "OPEN", page = 0, size = 10): Observable<PageResponse<JobOpening>> {
     const statusQuery = status ? `status=${status}&` : "";
 
-    return this.http.get<PageResponse<JobOpening>>(`${this.baseUrl}/api/jobs?${statusQuery}page=0&size=20`, {
+    return this.http.get<PageResponse<JobOpening>>(`${this.baseUrl}/api/jobs?${statusQuery}page=${page}&size=${size}`, {
       headers: this.authHeaders(token),
     });
   }

@@ -1,5 +1,6 @@
 package br.com.abrahanarley.controllers;
 
+import br.com.abrahanarley.dto.request.CandidateRegisterRequest;
 import br.com.abrahanarley.config.SecurityConfig;
 import br.com.abrahanarley.dto.request.LoginRequest;
 import br.com.abrahanarley.dto.response.AuthResponse;
@@ -50,6 +51,46 @@ class AuthControllerWebMvcTest {
 
 	@MockitoBean
 	private UserDetailsService userDetailsService;
+
+	@Test
+	void registerCandidateShouldReturnTokenAndAuthenticatedUser() throws Exception {
+		AppUser candidate = TestFixtures.candidate();
+		CandidateRegisterRequest request = new CandidateRegisterRequest(
+				"colaborador",
+				"Colaborador Teste",
+				"colaborador@empresa.com",
+				"user12345");
+		when(authService.registerCandidate(request)).thenReturn(new AuthResponse(
+				"Bearer",
+				"candidate-token",
+				7200,
+				AuthenticatedUserResponse.from(candidate)));
+
+		mockMvc.perform(post("/api/auth/candidate/register")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.tokenType").value("Bearer"))
+				.andExpect(jsonPath("$.accessToken").value("candidate-token"))
+				.andExpect(jsonPath("$.user.username").value("colaborador"))
+				.andExpect(jsonPath("$.user.role").value("CANDIDATE"));
+	}
+
+	@Test
+	void registerCandidateShouldReturnBadRequestWhenPayloadIsInvalid() throws Exception {
+		CandidateRegisterRequest request = new CandidateRegisterRequest(
+				"@@",
+				"",
+				"email-invalido",
+				"curta");
+
+		mockMvc.perform(post("/api/auth/candidate/register")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(request)))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.path").value("/api/auth/candidate/register"));
+	}
 
 	@Test
 	void loginShouldReturnTokenAndAuthenticatedUser() throws Exception {

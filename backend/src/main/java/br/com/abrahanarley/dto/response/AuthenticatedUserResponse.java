@@ -14,6 +14,8 @@ public record AuthenticatedUserResponse(
 		String username,
 		@Schema(description = "Nome completo.", example = "Administrador RH")
 		String fullName,
+		@Schema(description = "E-mail do usuario.", example = "admin@empresa.com")
+		String email,
 		@Schema(description = "Departamento do colaborador.", example = "Recursos Humanos")
 		String department,
 		@Schema(description = "Perfil de acesso.", example = "ADMIN")
@@ -24,6 +26,7 @@ public record AuthenticatedUserResponse(
 				user.getId(),
 				user.getUsername(),
 				user.getFullName(),
+				user.getEmail(),
 				user.getDepartment(),
 				user.getRole());
 	}

@@ -33,6 +33,13 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface CandidateRegisterRequest {
+  username: string;
+  fullName: string;
+  email: string;
+  password: string;
+}
+
 export interface JobOpening {
   id: string;
   title: string;

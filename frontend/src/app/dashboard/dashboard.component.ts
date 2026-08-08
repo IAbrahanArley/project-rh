@@ -54,10 +54,15 @@ import { NotificationListComponent, NotificationReadFilter } from "../notificati
           [jobs]="jobs()"
           [selectedJobId]="selectedJobId()"
           [selectedStatus]="jobStatusFilter()"
+          [page]="jobsPage()"
+          [totalPages]="jobsTotalPages()"
+          [first]="jobsFirst()"
+          [last]="jobsLast()"
           [canFilterStatus]="session()?.user?.role === 'ADMIN'"
           [loading]="loading()"
           (selectJob)="selectJob($event)"
           (statusChange)="changeJobStatusFilter($event)"
+          (pageChange)="changeJobsPage($event)"
         />
 
         <app-job-detail
@@ -108,6 +113,10 @@ import { NotificationListComponent, NotificationReadFilter } from "../notificati
 export class DashboardComponent implements OnInit {
   readonly session = this.authService.session;
   readonly jobs = signal<JobOpening[]>([]);
+  readonly jobsPage = signal(0);
+  readonly jobsTotalPages = signal(0);
+  readonly jobsFirst = signal(true);
+  readonly jobsLast = signal(true);
   readonly applications = signal<JobApplication[]>([]);
   readonly adminApplications = signal<JobApplication[]>([]);
   readonly notifications = signal<Notification[]>([]);
@@ -148,7 +157,7 @@ export class DashboardComponent implements OnInit {
     const isAdmin = session.user.role === "ADMIN";
 
     forkJoin({
-      jobs: this.api.listJobs(session.token, isAdmin ? this.jobStatusFilter() : "OPEN"),
+      jobs: this.api.listJobs(session.token, isAdmin ? this.jobStatusFilter() : "OPEN", this.jobsPage()),
       applications: isAdmin
         ? of(this.emptyPage<JobApplication>())
         : this.api.listMyApplications(session.token).pipe(catchError(() => of(this.emptyPage<JobApplication>()))),
@@ -162,6 +171,10 @@ export class DashboardComponent implements OnInit {
           : (jobs.content[0]?.id ?? null);
 
         this.jobs.set(jobs.content);
+        this.jobsPage.set(jobs.page);
+        this.jobsTotalPages.set(jobs.totalPages);
+        this.jobsFirst.set(jobs.first);
+        this.jobsLast.set(jobs.last);
         this.applications.set(applications.content);
         this.notifications.set(notifications.content);
         this.unreadCount.set(unread.unreadCount);
@@ -196,6 +209,18 @@ export class DashboardComponent implements OnInit {
     }
 
     this.jobStatusFilter.set(status);
+    this.jobsPage.set(0);
+    this.selectedJobId.set(null);
+    this.stopEditingJob();
+    this.loadDashboard();
+  }
+
+  changeJobsPage(page: number): void {
+    if (page < 0 || page === this.jobsPage() || page >= this.jobsTotalPages()) {
+      return;
+    }
+
+    this.jobsPage.set(page);
     this.selectedJobId.set(null);
     this.stopEditingJob();
     this.loadDashboard();

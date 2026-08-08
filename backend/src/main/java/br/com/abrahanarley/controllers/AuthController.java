@@ -1,5 +1,6 @@
 package br.com.abrahanarley.controllers;
 
+import br.com.abrahanarley.dto.request.CandidateRegisterRequest;
 import br.com.abrahanarley.dto.request.LoginRequest;
 import br.com.abrahanarley.dto.response.AuthenticatedUserResponse;
 import br.com.abrahanarley.dto.response.AuthResponse;
@@ -18,6 +19,11 @@ public class AuthController implements AuthApi {
 	public AuthController(AuthService authService, AuthenticatedUserService authenticatedUserService) {
 		this.authService = authService;
 		this.authenticatedUserService = authenticatedUserService;
+	}
+
+	@Override
+	public AuthResponse registerCandidate(CandidateRegisterRequest request) {
+		return authService.registerCandidate(request);
 	}
 
 	@Override

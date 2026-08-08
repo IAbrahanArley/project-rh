@@ -44,6 +44,7 @@ public class SecurityConfig {
 						.accessDeniedHandler((request, response, accessDeniedException) ->
 								response.sendError(403, "Access denied.")))
 				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers(HttpMethod.POST, "/api/auth/candidate/register").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 						.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 						.requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
