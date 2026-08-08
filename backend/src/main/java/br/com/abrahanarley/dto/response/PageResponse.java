@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.dto.response;
+package br.com.abrahanarley.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.domain.Page;

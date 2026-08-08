@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.services;
+package br.com.abrahanarley.services;
 
 import br.com.abrahanarley.dto.request.CompleteResumeUploadRequest;
 import br.com.abrahanarley.dto.request.ResumeUploadUrlRequest;
@@ -14,7 +14,6 @@ import br.com.abrahanarley.support.TestFixtures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -47,13 +46,17 @@ class CandidateResumeServiceTest {
 	@Mock
 	private ResumeStorageService resumeStorageService;
 
-	@InjectMocks
 	private CandidateResumeService candidateResumeService;
 
 	@BeforeEach
 	void setUp() {
-		ReflectionTestUtils.setField(candidateResumeService, "keyPrefix", "resumes");
-		ReflectionTestUtils.setField(candidateResumeService, "maxSizeBytes", 10_485_760L);
+		candidateResumeService = new CandidateResumeService(
+				candidateResumeRepository,
+				userRepository,
+				authenticatedUserService,
+				resumeStorageService,
+				"resumes",
+				10_485_760L);
 	}
 
 	@Test

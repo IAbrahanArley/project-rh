@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.dto.response;
+package br.com.abrahanarley.dto.response;
 
 import br.com.abrahanarley.entities.CandidateResume;
 import io.swagger.v3.oas.annotations.media.Schema;

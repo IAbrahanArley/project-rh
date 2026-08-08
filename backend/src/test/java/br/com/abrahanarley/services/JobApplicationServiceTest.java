@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.services;
+package br.com.abrahanarley.services;
 
 import br.com.abrahanarley.dto.request.ApplicationStatusRequest;
 import br.com.abrahanarley.dto.request.EvaluationRequest;

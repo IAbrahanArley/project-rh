@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.dto.response;
+package br.com.abrahanarley.dto.response;
 
 import br.com.abrahanarley.entities.JobOpening;
 import br.com.abrahanarley.enums.JobStatus;

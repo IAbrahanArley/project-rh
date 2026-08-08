@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.services;
+package br.com.abrahanarley.services;
 
 import br.com.abrahanarley.dto.response.NotificationResponse;
 import br.com.abrahanarley.dto.response.UnreadNotificationsResponse;

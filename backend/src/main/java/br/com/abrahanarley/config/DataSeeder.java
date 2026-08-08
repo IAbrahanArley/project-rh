@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.config;
+package br.com.abrahanarley.config;
 
 import br.com.abrahanarley.entities.AppUser;
 import br.com.abrahanarley.entities.JobOpening;

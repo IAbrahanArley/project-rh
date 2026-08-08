@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.dto.request;
+package br.com.abrahanarley.dto.request;
 
 import br.com.abrahanarley.enums.JobStatus;
 import io.swagger.v3.oas.annotations.media.Schema;

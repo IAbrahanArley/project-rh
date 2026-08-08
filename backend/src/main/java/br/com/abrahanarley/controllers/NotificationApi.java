@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.controllers;
+package br.com.abrahanarley.controllers;
 
 import br.com.abrahanarley.dto.response.NotificationResponse;
 import br.com.abrahanarley.dto.response.PageResponse;

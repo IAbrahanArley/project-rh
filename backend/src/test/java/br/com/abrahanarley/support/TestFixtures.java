@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.support;
+package br.com.abrahanarley.support;
 
 import br.com.abrahanarley.entities.AppUser;
 import br.com.abrahanarley.entities.CandidateEvaluation;

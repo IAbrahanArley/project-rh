@@ -1,4 +1,4 @@
-﻿package br.com.abrahanarley.controllers;
+package br.com.abrahanarley.controllers;
 
 import br.com.abrahanarley.dto.request.JobOpeningFilter;
 import br.com.abrahanarley.config.SecurityConfig;
