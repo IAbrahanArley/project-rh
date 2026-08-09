@@ -2,13 +2,20 @@
 
 Aplicação full stack para recrutamento interno. O sistema permite autenticar usuários, consultar vagas, cadastrar e editar vagas como RH, candidatar-se como colaborador, acompanhar candidaturas, atualizar status, registrar avaliações e receber notificações.
 
+## Deploy
+
+O projeto está publicado na AWS e pode ser acessado sem configuração local:
+
+```text
+http://3.92.70.142
+```
 ## Stack
 
 - Backend: Java 21, Spring Boot 3.5, Spring Security, JWT, JPA, Flyway e PostgreSQL
 - Frontend: Angular com Reactive Forms
-- Infra: Docker e Docker Compose
+- Infra: Docker, Docker Compose, Nginx, AWS EC2, S3 e GitHub Actions
 
-## Como Iniciar Com Docker
+## Como Rodar Localmente Com Docker
 
 Na raiz do projeto, execute:
 
@@ -30,7 +37,9 @@ O Docker Compose sobe três serviços:
 - `api`: backend Spring Boot
 - `frontend`: aplicação Angular servida por Nginx
 
-## Como Iniciar Separado
+Observação: o ambiente local sobe a aplicação, banco e API. Para testar upload real de currículo localmente, também é necessário configurar as variáveis do S3 descritas abaixo.
+
+## Como Rodar Localmente Separado
 
 Backend:
 
@@ -74,9 +83,11 @@ RESUME_BUCKET=nome-do-bucket-privado
 AWS_REGION=us-east-1
 AWS_ACCESS_KEY_ID=chave-com-acesso-ao-bucket
 AWS_SECRET_ACCESS_KEY=segredo-com-acesso-ao-bucket
+RESUME_KEY_PREFIX=resumes
 RESUME_MAX_SIZE_BYTES=10485760
+RESUME_UPLOAD_URL_EXPIRATION_SECONDS=300
+RESUME_DOWNLOAD_URL_EXPIRATION_SECONDS=300
 ```
-
 Frontend em Docker:
 
 ```text
