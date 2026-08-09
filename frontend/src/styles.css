@@ -646,12 +646,12 @@ app-admin-application-panel,
 }
 
 .application-review {
-  background: #f7faf9;
+  background: #ffffff;
   border: 1px solid #e0e8e5;
   border-radius: 8px;
   display: grid;
-  gap: 12px;
-  padding: 14px;
+  gap: 16px;
+  padding: 18px;
 }
 
 .application-review-header {
@@ -670,6 +670,17 @@ app-admin-application-panel,
 .feedback {
   color: #66736f;
   font-size: 13px;
+}
+
+.application-motivation {
+  background: #f7faf9;
+  border: 1px solid #e2e9e7;
+  border-radius: 8px;
+  color: #34423d;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 14px;
 }
 
 .feedback {
@@ -726,20 +737,39 @@ app-admin-application-panel,
 }
 
 .review-form {
-  align-items: end;
-  border-top: 1px solid #e2e9e7;
+  align-items: start;
+  background: #fbfdfc;
+  border: 1px solid #e2e9e7;
+  border-radius: 8px;
   display: grid;
-  gap: 10px;
-  grid-template-columns: 180px 1fr auto;
-  padding-top: 12px;
+  gap: 12px;
+  grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+  padding: 14px;
 }
 
 .evaluation-form {
-  grid-template-columns: 100px 150px 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .review-form textarea {
-  min-height: 76px;
+  min-height: 92px;
+  resize: vertical;
+}
+
+.review-submit {
+  justify-self: end;
+  min-width: 180px;
+}
+
+.status-review-form .review-submit {
+  grid-column: 1 / -1;
+}
+
+.evaluation-controls {
+  align-items: end;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(110px, 160px) minmax(0, 1fr);
 }
 
 .checkbox-label {
@@ -747,6 +777,7 @@ app-admin-application-panel,
   display: flex;
   gap: 8px;
   min-height: 42px;
+  padding-bottom: 2px;
 }
 
 .checkbox-label input {
@@ -754,6 +785,8 @@ app-admin-application-panel,
 }
 
 .wide-field {
+  display: grid;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -830,7 +863,8 @@ app-admin-application-panel,
   .application-review-header,
   .detail-heading,
   .review-form,
-  .evaluation-form {
+  .evaluation-form,
+  .evaluation-controls {
     display: grid;
     grid-template-columns: 1fr;
   }
@@ -843,7 +877,8 @@ app-admin-application-panel,
   .detail-actions button,
   .form-actions button,
   .notification-card button,
-  .resume-actions button {
+  .resume-actions button,
+  .review-submit {
     width: 100%;
   }
 

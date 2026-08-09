@@ -58,13 +58,17 @@ export interface ApplicationEvaluationSubmit {
               </div>
             </div>
 
-            <p>{{ application.motivation }}</p>
+            <p class="application-motivation">{{ application.motivation }}</p>
 
             @if (application.feedback) {
               <p class="feedback">{{ application.feedback }}</p>
             }
 
-            <form class="review-form" [formGroup]="statusFormFor(application)" (ngSubmit)="submitStatus(application)">
+            <form
+              class="review-form status-review-form"
+              [formGroup]="statusFormFor(application)"
+              (ngSubmit)="submitStatus(application)"
+            >
               <label>
                 Status
                 <select formControlName="status">
@@ -79,7 +83,9 @@ export interface ApplicationEvaluationSubmit {
                 <textarea formControlName="feedback" placeholder="Retorno para o colaborador"></textarea>
               </label>
 
-              <button [disabled]="statusFormFor(application).invalid || loading">Salvar andamento</button>
+              <button class="review-submit" [disabled]="statusFormFor(application).invalid || loading">
+                Salvar andamento
+              </button>
             </form>
 
             <form
@@ -87,22 +93,26 @@ export interface ApplicationEvaluationSubmit {
               [formGroup]="evaluationFormFor(application)"
               (ngSubmit)="submitEvaluation(application)"
             >
-              <label>
-                Nota
-                <input formControlName="score" type="number" min="1" max="5" />
-              </label>
+              <div class="evaluation-controls">
+                <label>
+                  Nota
+                  <input formControlName="score" type="number" min="1" max="5" />
+                </label>
 
-              <label class="checkbox-label">
-                <input formControlName="recommended" type="checkbox" />
-                Recomendado
-              </label>
+                <label class="checkbox-label">
+                  <input formControlName="recommended" type="checkbox" />
+                  Recomendado
+                </label>
+              </div>
 
               <label class="wide-field">
                 Comentários internos
                 <textarea formControlName="comments" placeholder="Observações da avaliação"></textarea>
               </label>
 
-              <button [disabled]="evaluationFormFor(application).invalid || loading">Registrar avaliação</button>
+              <button class="review-submit" [disabled]="evaluationFormFor(application).invalid || loading">
+                Registrar avaliação
+              </button>
             </form>
           </article>
         } @empty {
